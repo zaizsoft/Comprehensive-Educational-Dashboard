@@ -431,7 +431,7 @@ const App: React.FC = () => {
 };
 
 const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: CurriculumConfig, observations: Record<number, string> }> = ({ title, group, curriculum, observations }) => (
-  <div className="print-page w-[210mm] h-[297mm] bg-white p-[5mm_10mm_5mm_10mm] shadow-xl border border-black flex flex-col text-center box-border overflow-hidden">
+  <div className="print-page w-[210mm] h-[297mm] bg-white p-[2mm_10mm_5mm_10mm] shadow-xl border border-black flex flex-col text-center box-border overflow-hidden">
     <div className="border-[2px] border-black px-[40px] py-[6px] inline-block rounded-full mb-[8px] font-black text-[18px] mx-auto bg-white">
       {title}
     </div>
@@ -513,7 +513,7 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
 );
 
 const PerformanceCardPage: React.FC<{ group: GroupData, curriculum: CurriculumConfig, observations: Record<number, string> }> = ({ group, curriculum, observations }) => (
-  <div className="print-page w-[210mm] h-[297mm] bg-white p-[5mm_10mm_5mm_10mm] shadow-xl border border-black flex flex-col text-center relative box-border overflow-hidden">
+  <div className="print-page w-[210mm] h-[297mm] bg-white p-[2mm_10mm_5mm_10mm] shadow-xl border border-black flex flex-col text-center relative box-border overflow-hidden">
     <div className="border-[3px] border-black inline-block px-[50px] py-[6px] rounded-[15px] mb-[10px] bg-white mx-auto">
       <h2 className="text-[20px] font-black">بطاقة تقييم أداء التلاميذ</h2>
     </div>
@@ -531,7 +531,7 @@ const PerformanceCardPage: React.FC<{ group: GroupData, curriculum: CurriculumCo
       </div>
     </div>
 
-    <div className="border-y-[2px] border-black py-[6px] px-[12px] mb-[10px] font-bold text-[12px] leading-relaxed bg-[#f8fafc] text-right">
+    <div className="border-y-[2px] border-black py-[6px] px-[12px] mb-[10px] font-bold text-[9px] leading-none bg-[#f8fafc] text-right whitespace-nowrap overflow-hidden">
       يتم تقييم التلميذ بشكل مستمر عن طريق رصد دائم للأداء من أول يوم في الفصل إلى حصة التقويم التحصيلي، مع مراعاة الجوانب الانضباطية والتقنية.
     </div>
 
