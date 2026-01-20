@@ -23,9 +23,9 @@ import {
   Eye
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
-import { Stage, Student, AppState, GroupData, CurriculumConfig } from './types';
-import { LEVELS_CONFIG, TERM_MAPPING } from './constants';
-import { geminiService } from './services/geminiService';
+import { Stage, Student, AppState, GroupData, CurriculumConfig } from './types.ts';
+import { LEVELS_CONFIG, TERM_MAPPING } from './constants.ts';
+import { geminiService } from './services/geminiService.ts';
 
 const LEVEL_NAMES: Record<string, string> = {
   "1": "السنة الأولى",
@@ -177,7 +177,6 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen pb-20 overflow-x-hidden bg-[#F1F5F9]">
-      {/* Dashboard Section (Top) */}
       <div className="no-print bg-white/80 backdrop-blur-md border-b sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto p-4 sm:p-6">
           <header className="flex flex-col lg:flex-row items-center justify-between mb-8 gap-6">
@@ -395,7 +394,6 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {/* Preview Section (Bottom) - Redesigned as a Document Viewer */}
       <div className={`preview-engine ${currentStage === Stage.FINAL_PREVIEW ? 'block' : 'hidden'} print:block bg-slate-200/50 py-20 min-h-screen`}>
         <div className="max-w-[340mm] mx-auto flex flex-col items-center gap-24">
           
