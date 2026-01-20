@@ -431,12 +431,12 @@ const App: React.FC = () => {
 };
 
 const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: CurriculumConfig, observations: Record<number, string> }> = ({ title, group, curriculum, observations }) => (
-  <div className="print-page w-[210mm] h-[297mm] bg-white p-[10mm] shadow-xl border border-black flex flex-col text-center box-border overflow-hidden">
-    <div className="border-[2px] border-black px-[40px] py-[6px] inline-block rounded-full mb-[10px] font-black text-[18px] mx-auto bg-white">
+  <div className="print-page w-[210mm] h-[297mm] bg-white p-[5mm_10mm_5mm_10mm] shadow-xl border border-black flex flex-col text-center box-border overflow-hidden">
+    <div className="border-[2px] border-black px-[40px] py-[6px] inline-block rounded-full mb-[8px] font-black text-[18px] mx-auto bg-white">
       {title}
     </div>
     
-    <div className="flex justify-between text-[11px] font-bold mb-[8px] text-right">
+    <div className="flex justify-between text-[11px] font-bold mb-[6px] text-right">
       <div className="space-y-0.5">
         <p>المؤسسة: <strong>{group.schoolName}</strong></p>
         <p>المستوى: <strong>{LEVEL_NAMES[group.level] || group.level} ({group.section})</strong></p>
@@ -449,11 +449,11 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
       </div>
     </div>
 
-    <div className="border-[2.5px] border-black p-[6px] mb-[8px] font-black text-[11px] bg-white text-right">
+    <div className="border-[2.5px] border-black p-[5px] mb-[6px] font-black text-[11px] bg-white text-right">
       الكفاءة الختامية: {curriculum.kafaa}
     </div>
 
-    <div className="border-[2.5px] border-black mb-[8px] text-right">
+    <div className="border-[2.5px] border-black mb-[6px] text-right">
       <div className="border-b-[2px] border-black p-[2px] text-center font-black text-[11px] bg-[#f1f1f1]">
         المعاييريـــــــــــــــــــــــــــــــــة
       </div>
@@ -513,12 +513,12 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
 );
 
 const PerformanceCardPage: React.FC<{ group: GroupData, curriculum: CurriculumConfig, observations: Record<number, string> }> = ({ group, curriculum, observations }) => (
-  <div className="print-page w-[210mm] h-[297mm] bg-white p-[10mm] shadow-xl border border-black flex flex-col text-center relative box-border overflow-hidden">
-    <div className="border-[3px] border-black inline-block px-[50px] py-[6px] rounded-[15px] mb-[12px] bg-white mx-auto">
+  <div className="print-page w-[210mm] h-[297mm] bg-white p-[5mm_10mm_5mm_10mm] shadow-xl border border-black flex flex-col text-center relative box-border overflow-hidden">
+    <div className="border-[3px] border-black inline-block px-[50px] py-[6px] rounded-[15px] mb-[10px] bg-white mx-auto">
       <h2 className="text-[20px] font-black">بطاقة تقييم أداء التلاميذ</h2>
     </div>
 
-    <div className="flex justify-between text-[11px] font-bold mb-[12px] text-right">
+    <div className="flex justify-between text-[11px] font-bold mb-[10px] text-right">
       <div className="space-y-0.5">
         <p>المؤسسة: <strong>{group.schoolName}</strong></p>
         <p>المستوى: <strong>{LEVEL_NAMES[group.level] || group.level} ({group.section})</strong></p>
@@ -531,7 +531,7 @@ const PerformanceCardPage: React.FC<{ group: GroupData, curriculum: CurriculumCo
       </div>
     </div>
 
-    <div className="border-y-[2px] border-black py-[6px] px-[12px] mb-[12px] font-bold text-[12px] leading-relaxed bg-[#f8fafc] text-right">
+    <div className="border-y-[2px] border-black py-[6px] px-[12px] mb-[10px] font-bold text-[12px] leading-relaxed bg-[#f8fafc] text-right">
       يتم تقييم التلميذ بشكل مستمر عن طريق رصد دائم للأداء من أول يوم في الفصل إلى حصة التقويم التحصيلي، مع مراعاة الجوانب الانضباطية والتقنية.
     </div>
 
