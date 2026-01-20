@@ -1,0 +1,8 @@
+{
+  "name": "المنصة التربوية الشاملة - Comprehensive Educational Dashboard",
+  "description": "A professional dashboard for teachers to manage diagnostic assessments, performance cards, student lists, and printable educational documents with AI-powered observations.",
+  "requestFramePermissions": [
+    "camera",
+    "microphone"
+  ]
+}
