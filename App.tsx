@@ -65,7 +65,7 @@ const App: React.FC = () => {
   const extractInfo = (data: any[][], sheetName: string): GroupData => {
     const row4Cells = data[3] || [];
     const row4Text = row4Cells.filter(c => c).join(' ');
-    const schoolName = row4Text.replace(/المؤسسة\s*[:：]\s*/g, '').trim() || 'مدرسة غير محددة';
+    const schoolName = row4Text.replace(/المؤسسة\s*[:：]\s*/g, '').trim() || 'مدرسة الشهيد بني العربي';
 
     const row5Cells = data[4] || [];
     const row5Text = row5Cells.filter(c => c).join(' ');
@@ -455,12 +455,12 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
     </div>
     
     <div className="flex justify-between items-start text-[8.5px] font-bold mb-1 px-2">
-      <div className="space-y-0.5 text-right w-1/3">
+      <div className="space-y-0.5 text-right w-1/2">
         <p>المؤسسة: <span className="font-black">{group.schoolName}</span></p>
         <p>المستوى: <span className="font-black">{LEVEL_NAMES[group.level] || group.level} {group.section}</span></p>
         <p>الأستاذ: <span className="font-black">الزايز محمد الطاهر</span></p>
       </div>
-      <div className="space-y-0.5 text-left w-1/3">
+      <div className="space-y-0.5 text-left w-1/2">
         <p>السنة الدراسية: <span className="font-black">{group.academicYear}</span></p>
         <p>الميدان: <span className="font-black">{TERM_MAPPING[group.term]}</span></p>
         <p>الفصل: <span className="font-black">{group.term}</span></p>
@@ -506,8 +506,8 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
         {Array.from({ length: 35 }).map((_, idx) => {
           const s = group.students[idx];
           return (
-            <tr key={idx} className={`h-[5.0mm] ${s?.isExempt ? 'bg-red-50/50' : ''}`}>
-              <td className="font-black text-center text-[8px] p-0 border-black border-[1px]">{idx + 1}</td>
+            <tr key={idx} className={`h-[5.5mm] ${s?.isExempt ? 'bg-red-50/50' : ''}`}>
+              <td className="font-black text-center text-[8.5px] p-0 border-black border-[1px]">{idx + 1}</td>
               <td className={`text-right pr-2 font-bold text-[8.5px] p-0 truncate max-w-[140px] border-black border-[1px] ${s?.isExempt ? 'text-red-600 line-through italic opacity-50' : 'text-slate-900'}`}>
                 {s?.name || ''}
               </td>
@@ -583,7 +583,7 @@ const PerformanceCardPage: React.FC<{ group: GroupData, curriculum: CurriculumCo
         {Array.from({ length: 35 }).map((_, idx) => {
           const s = group.students[idx];
           return (
-            <tr key={idx} className={`h-[5.2mm] ${s?.isExempt ? 'bg-red-50/50' : ''}`}>
+            <tr key={idx} className={`h-[5.5mm] ${s?.isExempt ? 'bg-red-50/50' : ''}`}>
               <td className="font-black text-center text-[8.5px] bg-slate-50/50 p-0 border-black border-[1px]">{idx + 1}</td>
               <td className={`text-right pr-3 font-bold text-[8.5px] p-0 truncate max-w-[160px] border-black border-[1px] ${s?.isExempt ? 'text-red-600 line-through opacity-50' : 'text-slate-900'}`}>{s?.name || ''}</td>
               {s?.isExempt ? (
@@ -672,8 +672,8 @@ const AttendancePage: React.FC<{ group: GroupData }> = ({ group }) => {
             {Array.from({ length: 35 }).map((_, idx) => {
               const s = group.students[idx];
               return (
-                <tr key={idx} className={`h-[4.6mm] ${s?.isExempt ? 'bg-red-50/50' : (idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/10')}`}>
-                  <td className="font-black text-center text-[7.5px] bg-slate-100 p-0 border-black border-[1px]">{idx + 1}</td>
+                <tr key={idx} className={`h-[5.0mm] ${s?.isExempt ? 'bg-red-50/50' : (idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/10')}`}>
+                  <td className="font-black text-center text-[8.0px] bg-slate-100 p-0 border-black border-[1px]">{idx + 1}</td>
                   <td className={`text-right pr-2 font-bold text-[8.5px] p-0 truncate max-w-[150px] border-black border-[1px] ${s?.isExempt ? 'text-red-600 line-through opacity-50' : 'text-slate-900'}`}>
                     {s?.name || ''}
                   </td>
