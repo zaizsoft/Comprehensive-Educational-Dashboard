@@ -156,7 +156,7 @@ const App: React.FC = () => {
     if (!activeGroup) return;
     setIsGeneratingAi(true);
     const newObservations: Record<number, string> = {};
-    const studentsToProcess = activeGroup.students.slice(0, 40);
+    const studentsToProcess = activeGroup.students.slice(0, 35);
     for (const student of studentsToProcess) {
       if (!student.isExempt) {
         const obs = await geminiService.generateStudentObservation(activeGroup.level, "جيد");
@@ -488,35 +488,35 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
     <table className="flex-grow w-full border-collapse">
       <thead>
         <tr className="h-5 bg-white">
-          <th rowSpan={2} className="w-[20px] font-black text-[8px] p-0">رقم</th>
-          <th rowSpan={2} className="w-[140px] text-right pr-2 font-black text-[8.5px] p-0">اللقب والاسم</th>
-          {[1, 2, 3, 4].map(i => <th key={i} colSpan={4} className="text-[7.5px] font-black p-0 leading-none">المعيار {i}</th>)}
-          <th colSpan={4} className="text-[7.5px] font-black bg-blue-50/20 p-0">الكفاءة الختامية</th>
-          <th rowSpan={2} className="w-[85px] font-black text-[8.5px] p-0">الملاحظة</th>
+          <th rowSpan={2} className="w-[20px] font-black text-[8px] p-0 border-black border-[1px]">رقم</th>
+          <th rowSpan={2} className="w-[140px] text-right pr-2 font-black text-[8.5px] p-0 border-black border-[1px]">اللقب والاسم</th>
+          {[1, 2, 3, 4].map(i => <th key={i} colSpan={4} className="text-[7.5px] font-black p-0 leading-none border-black border-[1px]">المعيار {i}</th>)}
+          <th colSpan={4} className="text-[7.5px] font-black bg-blue-50/20 p-0 border-black border-[1px]">الكفاءة الختامية</th>
+          <th rowSpan={2} className="w-[85px] font-black text-[8.5px] p-0 border-black border-[1px]">الملاحظة</th>
         </tr>
         <tr className="h-4 bg-white text-[7.5px] font-black">
           {Array(5).fill(0).map((_, gIdx) => (
             <React.Fragment key={gIdx}>
-              {['أ', 'ب', 'ج', 'د'].map(c => <th key={c} className="w-4 p-0">{c}</th>)}
+              {['أ', 'ب', 'ج', 'د'].map(c => <th key={c} className="w-4 p-0 border-black border-[1px]">{c}</th>)}
             </React.Fragment>
           ))}
         </tr>
       </thead>
       <tbody>
-        {Array.from({ length: 40 }).map((_, idx) => {
+        {Array.from({ length: 35 }).map((_, idx) => {
           const s = group.students[idx];
           return (
-            <tr key={idx} className={`h-[4.4mm] ${s?.isExempt ? 'bg-red-50/50' : ''}`}>
-              <td className="font-black text-center text-[8px] p-0">{idx + 1}</td>
-              <td className={`text-right pr-2 font-bold text-[8.5px] p-0 truncate max-w-[140px] ${s?.isExempt ? 'text-red-600 line-through italic opacity-50' : 'text-slate-900'}`}>
+            <tr key={idx} className={`h-[5.0mm] ${s?.isExempt ? 'bg-red-50/50' : ''}`}>
+              <td className="font-black text-center text-[8px] p-0 border-black border-[1px]">{idx + 1}</td>
+              <td className={`text-right pr-2 font-bold text-[8.5px] p-0 truncate max-w-[140px] border-black border-[1px] ${s?.isExempt ? 'text-red-600 line-through italic opacity-50' : 'text-slate-900'}`}>
                 {s?.name || ''}
               </td>
               {s?.isExempt ? (
-                 <td colSpan={21} className="text-[7.5px] text-red-600 font-black italic text-center p-0">تلميذ معفي من الممارسة</td>
+                 <td colSpan={21} className="text-[7.5px] text-red-600 font-black italic text-center p-0 border-black border-[1px]">تلميذ معفي من الممارسة</td>
               ) : (
                 <>
                   {Array(20).fill(0).map((_, i) => <td key={i} className="p-0 border-black border-[1px]"></td>)}
-                  <td className="text-[6.5px] font-black text-blue-800 px-0.5 leading-none text-center truncate">{observations[s?.id] || ''}</td>
+                  <td className="text-[6.5px] font-black text-blue-800 px-0.5 leading-none text-center truncate border-black border-[1px]">{observations[s?.id] || ''}</td>
                 </>
               )}
             </tr>
@@ -562,32 +562,32 @@ const PerformanceCardPage: React.FC<{ group: GroupData, curriculum: CurriculumCo
     <table className="flex-grow mb-1 w-full border-collapse">
       <thead>
         <tr className="h-6 bg-slate-100">
-          <th className="w-[30px] font-black text-[9px] p-0">رقم</th>
-          <th className="w-[160px] text-right pr-3 font-black text-[9px] p-0">اللقب والاسم</th>
-          <th colSpan={3} className="font-black text-[8px] bg-emerald-50 p-0">الانضباط (5ن)</th>
-          <th colSpan={2} className="font-black text-[8px] bg-blue-50 p-0">التقني (5ن)</th>
-          <th className="w-[45px] font-black text-red-600 text-[9px] p-0">العلامة</th>
-          <th className="w-[90px] font-black text-[9px] p-0">الملاحظة</th>
+          <th className="w-[30px] font-black text-[9px] p-0 border-black border-[1px]">رقم</th>
+          <th className="w-[160px] text-right pr-3 font-black text-[9px] p-0 border-black border-[1px]">اللقب والاسم</th>
+          <th colSpan={3} className="font-black text-[8px] bg-emerald-50 p-0 border-black border-[1px]">الانضباط (5ن)</th>
+          <th colSpan={2} className="font-black text-[8px] bg-blue-50 p-0 border-black border-[1px]">التقني (5ن)</th>
+          <th className="w-[45px] font-black text-red-600 text-[9px] p-0 border-black border-[1px]">العلامة</th>
+          <th className="w-[90px] font-black text-[9px] p-0 border-black border-[1px]">الملاحظة</th>
         </tr>
         <tr className="h-4 bg-slate-100 text-[7px] font-black">
-          <th colSpan={2} className="p-0"></th>
-          <th className="w-10 p-0">حضور</th>
-          <th className="w-10 p-0">بذلة</th>
-          <th className="w-10 p-0">سلوك</th>
-          <th className="w-10 p-0">مشاركة</th>
-          <th className="w-10 p-0">تنسيق</th>
-          <th colSpan={2} className="p-0"></th>
+          <th colSpan={2} className="p-0 border-black border-[1px]"></th>
+          <th className="w-10 p-0 border-black border-[1px]">حضور</th>
+          <th className="w-10 p-0 border-black border-[1px]">بذلة</th>
+          <th className="w-10 p-0 border-black border-[1px]">سلوك</th>
+          <th className="w-10 p-0 border-black border-[1px]">مشاركة</th>
+          <th className="w-10 p-0 border-black border-[1px]">تنسيق</th>
+          <th colSpan={2} className="p-0 border-black border-[1px]"></th>
         </tr>
       </thead>
       <tbody>
-        {Array.from({ length: 40 }).map((_, idx) => {
+        {Array.from({ length: 35 }).map((_, idx) => {
           const s = group.students[idx];
           return (
-            <tr key={idx} className={`h-[4.4mm] ${s?.isExempt ? 'bg-red-50/50' : ''}`}>
-              <td className="font-black text-center text-[8.5px] bg-slate-50/50 p-0">{idx + 1}</td>
-              <td className={`text-right pr-3 font-bold text-[8.5px] p-0 truncate max-w-[160px] ${s?.isExempt ? 'text-red-600 line-through opacity-50' : 'text-slate-900'}`}>{s?.name || ''}</td>
+            <tr key={idx} className={`h-[5.2mm] ${s?.isExempt ? 'bg-red-50/50' : ''}`}>
+              <td className="font-black text-center text-[8.5px] bg-slate-50/50 p-0 border-black border-[1px]">{idx + 1}</td>
+              <td className={`text-right pr-3 font-bold text-[8.5px] p-0 truncate max-w-[160px] border-black border-[1px] ${s?.isExempt ? 'text-red-600 line-through opacity-50' : 'text-slate-900'}`}>{s?.name || ''}</td>
               {s?.isExempt ? (
-                <td colSpan={7} className="text-[8px] text-red-600 font-black italic text-center p-0">تلميذ معفي</td>
+                <td colSpan={7} className="text-[8px] text-red-600 font-black italic text-center p-0 border-black border-[1px]">تلميذ معفي</td>
               ) : (
                 <>
                   <td className="p-0 border-black border-[1px]"></td>
@@ -596,7 +596,7 @@ const PerformanceCardPage: React.FC<{ group: GroupData, curriculum: CurriculumCo
                   <td className="p-0 border-black border-[1px]"></td>
                   <td className="p-0 border-black border-[1px]"></td>
                   <td className="p-0 border-black border-[1px]"></td>
-                  <td className="text-[6.5px] font-black text-blue-900 leading-none px-0.5 text-center truncate p-0">{observations[s?.id] || ''}</td>
+                  <td className="text-[6.5px] font-black text-blue-900 leading-none px-0.5 text-center truncate p-0 border-black border-[1px]">{observations[s?.id] || ''}</td>
                 </>
               )}
             </tr>
@@ -654,33 +654,33 @@ const AttendancePage: React.FC<{ group: GroupData }> = ({ group }) => {
         <table className="flex-grow w-full border-collapse">
           <thead>
             <tr className="h-4 bg-slate-200">
-              <th className="w-[20px] font-black text-[8.5px] p-0" rowSpan={2}>ر</th>
-              <th className="w-[150px] text-right pr-2 font-black text-[9px] p-0" rowSpan={2}>اللقب والاسم الكامل</th>
+              <th className="w-[20px] font-black text-[8.5px] p-0 border-black border-[1px]" rowSpan={2}>ر</th>
+              <th className="w-[150px] text-right pr-2 font-black text-[9px] p-0 border-black border-[1px]" rowSpan={2}>اللقب والاسم الكامل</th>
               {academicYearMonths.map(m => (
-                <th key={m.name} className="text-center font-black bg-slate-300 text-[8px] border-x border-black p-0" colSpan={m.weeks}>
+                <th key={m.name} className="text-center font-black bg-slate-300 text-[8px] border-x border-black p-0 border-black border-[1px]" colSpan={m.weeks}>
                   {m.name}
                 </th>
               ))}
             </tr>
             <tr className="h-3.5 bg-slate-200 font-black text-[7px]">
               {academicYearMonths.map(m => Array.from({ length: m.weeks }).map((_, i) => (
-                <th key={`${m.name}-${i}`} className="w-5.5 border-x border-slate-400 p-0">أ{i + 1}</th>
+                <th key={`${m.name}-${i}`} className="w-5.5 border-x border-slate-400 p-0 border-black border-[1px]">أ{i + 1}</th>
               )))}
             </tr>
           </thead>
           <tbody>
-            {Array.from({ length: 40 }).map((_, idx) => {
+            {Array.from({ length: 35 }).map((_, idx) => {
               const s = group.students[idx];
               return (
-                <tr key={idx} className={`h-[3.9mm] ${s?.isExempt ? 'bg-red-50/50' : (idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/10')}`}>
-                  <td className="font-black text-center text-[7.5px] bg-slate-100 p-0">{idx + 1}</td>
-                  <td className={`text-right pr-2 font-bold text-[8.5px] p-0 truncate max-w-[150px] ${s?.isExempt ? 'text-red-600 line-through opacity-50' : 'text-slate-900'}`}>
+                <tr key={idx} className={`h-[4.6mm] ${s?.isExempt ? 'bg-red-50/50' : (idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/10')}`}>
+                  <td className="font-black text-center text-[7.5px] bg-slate-100 p-0 border-black border-[1px]">{idx + 1}</td>
+                  <td className={`text-right pr-2 font-bold text-[8.5px] p-0 truncate max-w-[150px] border-black border-[1px] ${s?.isExempt ? 'text-red-600 line-through opacity-50' : 'text-slate-900'}`}>
                     {s?.name || ''}
                   </td>
                   {s?.isExempt ? (
-                    <td colSpan={totalWeeks} className="text-[7.5px] text-red-600 font-black italic text-center p-0">تلميذ معفي</td>
+                    <td colSpan={totalWeeks} className="text-[7.5px] text-red-600 font-black italic text-center p-0 border-black border-[1px]">تلميذ معفي</td>
                   ) : (
-                    Array(totalWeeks).fill(0).map((_, weekIdx) => <td key={weekIdx} className="border-x border-slate-200 p-0"></td>)
+                    Array(totalWeeks).fill(0).map((_, weekIdx) => <td key={weekIdx} className="border-x border-slate-200 p-0 border-black border-[1px]"></td>)
                   )}
                 </tr>
               );
