@@ -33,21 +33,23 @@
           padding: 0 !important;
         }
         
-        /* جعل حاوية المعاينة الثابتة تتصرف كعنصر عادي عند الطباعة */
         .preview-overlay {
-          position: relative !important;
+          position: static !important;
           background: white !important;
           overflow: visible !important;
           display: block !important;
           padding: 0 !important;
           margin: 0 !important;
+          height: auto !important;
+          width: auto !important;
         }
 
         .pages-container {
-          margin-top: 0 !important;
+          margin: 0 !important;
           gap: 0 !important;
           padding: 0 !important;
           width: 100% !important;
+          display: block !important;
         }
 
         .print-page {
@@ -56,7 +58,7 @@
           border: none !important;
           page-break-after: always !important;
           page-break-inside: avoid !important;
-          position: relative;
+          position: relative !important;
         }
 
         .portrait-page {
@@ -74,16 +76,35 @@
         }
       }
 
-      /* تنسيق المعاينة على الشاشة */
+      /* Screen Preview - Professional Viewport */
+      .preview-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 100;
+        background-color: rgba(15, 23, 42, 0.98);
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .pages-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px;
+        min-width: min-content; /* Critical: allows wide landscape pages to push container width */
+        margin: 0 auto;
+        gap: 40px;
+      }
+
       .print-page {
         background: white;
-        box-shadow: 0 0 20px rgba(0,0,0,0.15);
-        margin: 20px auto;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
         position: relative;
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        transition: transform 0.2s ease;
+        flex-shrink: 0; /* Prevent resizing */
       }
 
       .portrait-page {
@@ -98,10 +119,11 @@
         padding: 8mm;
       }
 
-      /* تخصيص الجداول لتبدو رسمية */
+      /* Custom Table Handling */
       table {
         width: 100%;
         border-collapse: collapse;
+        table-layout: fixed; /* Ensures column widths are respected */
       }
       
       th, td {
@@ -109,19 +131,26 @@
         text-align: center;
         padding: 2px;
         line-height: 1.2;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
 
-      /* شريط التمرير */
+      /* Scrollbar aesthetics */
       ::-webkit-scrollbar {
-        width: 8px;
-        height: 8px;
+        width: 10px;
+        height: 10px;
       }
       ::-webkit-scrollbar-track {
-        background: #f1f5f9;
+        background: #1e293b;
       }
       ::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 10px;
+        background: #475569;
+        border-radius: 5px;
+        border: 2px solid #1e293b;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #64748b;
       }
     </style>
   <script type="importmap">
