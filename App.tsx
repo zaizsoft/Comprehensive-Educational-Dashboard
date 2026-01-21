@@ -175,7 +175,7 @@ const App: React.FC = () => {
   }, [activeGroup]);
 
   return (
-    <div className="min-h-screen no-print-bg-none overflow-x-hidden bg-[#F1F5F9]">
+    <div className="min-h-screen no-print-bg-none overflow-x-hidden bg-[#F1F5F9] flex flex-col">
       <div className="no-print bg-white/80 backdrop-blur-md border-b sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto p-4 sm:p-6">
           <header className="flex flex-col lg:flex-row items-center justify-between mb-8 gap-6">
@@ -397,8 +397,8 @@ const App: React.FC = () => {
       </div>
 
       {/* Preview Container - Flexible Height and Dynamic width support */}
-      <div className={`preview-engine ${currentStage === Stage.FINAL_PREVIEW ? 'block' : 'hidden'} print:block bg-slate-200/50 sm:py-10 min-h-screen overflow-x-auto`}>
-        <div className="w-fit mx-auto flex flex-col items-center gap-[10mm] print:gap-0 px-4 sm:px-10 pb-20">
+      <div className={`preview-engine flex-1 ${currentStage === Stage.FINAL_PREVIEW ? 'block' : 'hidden'} print:block bg-slate-200/50 sm:py-10 h-auto overflow-x-auto overflow-y-visible`}>
+        <div className="w-fit mx-auto flex flex-col items-center gap-[15mm] print:gap-0 px-4 sm:px-10 pb-20">
           
           <div className="no-print mb-4 flex flex-col items-center gap-4">
             <div className="flex items-center gap-3 bg-white/90 backdrop-blur px-8 py-3 rounded-full shadow-md border border-slate-200">
@@ -408,9 +408,9 @@ const App: React.FC = () => {
           </div>
 
           {activeGroup && currentCurriculum && (
-            <div className="flex flex-col items-center gap-[15mm] print:gap-0 w-fit h-auto">
+            <div className="flex flex-col items-center gap-[15mm] print:gap-0 w-fit">
               {state.selectedPages.separator && (
-                <div className="print-page w-[210mm] h-[297mm] bg-white p-12 flex flex-col items-center justify-center shadow-xl overflow-hidden relative border border-slate-300 box-border">
+                <div className="print-page portrait-page w-[210mm] h-[297mm] bg-white p-12 flex flex-col items-center justify-center shadow-xl overflow-hidden relative border border-slate-300 box-border">
                   <div className="border-[20px] border-double border-slate-900 p-20 w-full h-full flex flex-col items-center justify-center space-y-24">
                       <div className="border-8 border-slate-900 px-16 py-8 rounded-[3rem] bg-slate-50 shadow-xl">
                         <h1 className="text-8xl font-black text-slate-900">{activeGroup.term}</h1>
@@ -436,7 +436,7 @@ const App: React.FC = () => {
 };
 
 const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: CurriculumConfig, observations: Record<number, string> }> = ({ title, group, curriculum, observations }) => (
-  <div className="print-page w-[210mm] h-[297mm] bg-white p-[2mm_10mm_5mm_10mm] shadow-xl border border-black flex flex-col text-center box-border overflow-hidden">
+  <div className="print-page portrait-page w-[210mm] h-[297mm] bg-white p-[2mm_10mm_5mm_10mm] shadow-xl border border-black flex flex-col text-center box-border overflow-hidden">
     <div className="border-[2px] border-black px-[40px] py-[6px] inline-block rounded-full mb-[8px] font-black text-[18px] mx-auto bg-white">
       {title}
     </div>
@@ -518,7 +518,7 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
 );
 
 const PerformanceCardPage: React.FC<{ group: GroupData, curriculum: CurriculumConfig, observations: Record<number, string> }> = ({ group, curriculum, observations }) => (
-  <div className="print-page w-[210mm] h-[297mm] bg-white p-[2mm_10mm_5mm_10mm] shadow-xl border border-black flex flex-col text-center relative box-border overflow-hidden">
+  <div className="print-page portrait-page w-[210mm] h-[297mm] bg-white p-[2mm_10mm_5mm_10mm] shadow-xl border border-black flex flex-col text-center relative box-border overflow-hidden">
     <div className="border-[3px] border-black inline-block px-[50px] py-[6px] rounded-[15px] mb-[10px] bg-white mx-auto">
       <h2 className="text-[20px] font-black">بطاقة تقييم أداء التلاميذ</h2>
     </div>

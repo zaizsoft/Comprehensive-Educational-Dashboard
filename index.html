@@ -14,15 +14,19 @@
         background-color: #f8fafc;
         margin: 0;
         padding: 0;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
       }
+      
       @media print {
         .no-print {
           display: none !important;
         }
-        body {
+        body, html {
           background-color: white !important;
           margin: 0 !important;
           padding: 0 !important;
+          height: auto !important;
         }
         #root {
           margin: 0 !important;
@@ -32,33 +36,35 @@
           padding: 0 !important;
           margin: 0 !important;
           background: none !important;
-          height: auto !important;
-          min-height: auto !important;
+          display: block !important;
+          width: 100% !important;
         }
         .print-page {
           margin: 0 !important;
           box-shadow: none !important;
-          border: none !important;
+          border: 1px solid black !important; /* تأمين الحدود عند الطباعة */
           page-break-after: always;
           page-break-inside: avoid;
           position: relative;
           display: flex !important;
           flex-direction: column;
         }
+        /* إعدادات الصفحات العمودية */
+        .portrait-page {
+          width: 210mm !important;
+          height: 297mm !important;
+        }
+        /* إعدادات الصفحات العريضة */
         .landscape-page {
-           page: landscape;
+          width: 330mm !important;
+          height: 210mm !important;
         }
         @page {
-          size: A4 portrait;
-          margin: 0;
-        }
-        @page landscape {
-          size: 330mm 210mm;
           margin: 0;
         }
       }
 
-      /* Custom Scrollbar for better UX */
+      /* تنسيق شريط التمرير */
       ::-webkit-scrollbar {
         width: 8px;
         height: 8px;
@@ -72,6 +78,11 @@
       }
       ::-webkit-scrollbar-thumb:hover {
         background: #94a3b8;
+      }
+
+      /* ضمان عرض الحاوية بشكل صحيح في المعاينة */
+      .preview-engine {
+        transition: all 0.3s ease;
       }
     </style>
   <script type="importmap">
