@@ -18,7 +18,8 @@ import {
   Layers,
   Info,
   ChevronDown,
-  Eye
+  Eye,
+  Download
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { Stage, Student, AppState, GroupData, CurriculumConfig } from './types.ts';
@@ -209,7 +210,7 @@ const App: React.FC = () => {
             </nav>
           </header>
 
-          <main className="bg-white rounded-[3rem] p-6 sm:p-12 border border-slate-200 shadow-2xl shadow-slate-200/50 min-h-[500px]">
+          <main className={`bg-white rounded-[3rem] p-6 sm:p-12 border border-slate-200 shadow-2xl shadow-slate-200/50 transition-all duration-500 ${currentStage === Stage.FINAL_PREVIEW ? 'min-h-fit' : 'min-h-[500px]'}`}>
             {currentStage === Stage.DATA_IMPORT && (
               <div className="space-y-10 animate-in fade-in zoom-in-95 duration-500">
                 {!state.groups.length ? (
@@ -341,68 +342,73 @@ const App: React.FC = () => {
             )}
 
             {currentStage === Stage.FINAL_PREVIEW && (
-              <div className="space-y-12 animate-in slide-in-from-bottom-8 duration-600 text-center">
-                <div className="max-w-4xl mx-auto bg-gradient-to-br from-blue-800 to-indigo-900 rounded-[4rem] p-16 text-white shadow-2xl space-y-10 relative overflow-hidden">
-                  <h2 className="text-5xl font-black tracking-tight">جاهز للإصدار النهائي</h2>
-                  <p className="text-xl text-blue-100 font-bold max-w-2xl mx-auto">تم دمج بيانات <span className="text-white underline">{activeGroup?.schoolName}</span> للفوج <span className="text-white">{activeGroup?.section}</span> بنجاح.</p>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pt-8">
-                    <button 
-                      onClick={generateAIObservations} 
-                      disabled={isGeneratingAi} 
-                      className="px-8 py-5 bg-white/10 text-white rounded-3xl font-black text-lg border border-white/30 backdrop-blur-md shadow-2xl transition-all flex items-center justify-center gap-4 disabled:opacity-50"
-                    >
-                      {isGeneratingAi ? <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div> : <Zap className="w-6 h-6 text-yellow-400" />}
-                      {isGeneratingAi ? 'جاري التحليل...' : 'توليد ملاحظات Gemini'}
-                    </button>
+              <div className="space-y-8 animate-in slide-in-from-bottom-8 duration-600 text-center">
+                <div className="max-w-4xl mx-auto bg-gradient-to-br from-slate-800 to-slate-900 rounded-[3rem] p-10 text-white shadow-xl relative overflow-hidden border border-slate-700">
+                  <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                    <div className="text-right space-y-2">
+                      <h2 className="text-3xl font-black tracking-tight">إصدار الوثائق النهائية</h2>
+                      <p className="text-sm text-slate-300 font-bold">تم دمج بيانات {activeGroup?.schoolName} للفوج {activeGroup?.section}</p>
+                    </div>
                     
-                    <button 
-                      onClick={() => window.print()} 
-                      className="px-8 py-5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-3xl font-black text-lg shadow-2xl transition-all flex items-center justify-center gap-4"
-                    >
-                      <FileText className="w-7 h-7" /> تصدير كـ PDF
-                    </button>
+                    <div className="flex flex-wrap items-center justify-center gap-4">
+                      <button 
+                        onClick={generateAIObservations} 
+                        disabled={isGeneratingAi} 
+                        className="px-6 py-4 bg-white/10 hover:bg-white/20 text-white rounded-2xl font-black text-sm border border-white/20 backdrop-blur-md transition-all flex items-center gap-3 disabled:opacity-50"
+                      >
+                        {isGeneratingAi ? <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div> : <Zap className="w-5 h-5 text-yellow-400" />}
+                        توليد ملاحظات AI
+                      </button>
+                      
+                      <button 
+                        onClick={() => window.print()} 
+                        className="px-6 py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl font-black text-sm shadow-lg transition-all flex items-center gap-3"
+                      >
+                        <Download className="w-5 h-5" /> تصدير PDF
+                      </button>
 
-                    <button 
-                      onClick={() => window.print()} 
-                      className="px-8 py-5 bg-yellow-400 hover:bg-yellow-500 text-blue-950 rounded-3xl font-black text-lg shadow-2xl transition-all flex items-center justify-center gap-4"
-                    >
-                      <Printer className="w-7 h-7" /> طباعة الوثائق
-                    </button>
+                      <button 
+                        onClick={() => window.print()} 
+                        className="px-6 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-2xl font-black text-sm shadow-lg transition-all flex items-center gap-3"
+                      >
+                        <Printer className="w-5 h-5" /> طباعة الكل
+                      </button>
+                    </div>
                   </div>
                 </div>
 
-                <div className="flex flex-col items-center gap-4 text-slate-400 py-10">
-                  <ChevronLeft className="w-8 h-8 rotate-90 animate-bounce" />
-                  <p className="text-sm font-black italic">معاينة الوثائق المرتبة في الأسفل (A4 Portrait View)</p>
+                <div className="flex items-center justify-center gap-3 text-slate-400 py-4 no-print">
+                  <Eye className="w-5 h-5" />
+                  <p className="text-xs font-black italic">المعاينة المباشرة (A4/330mm) مفعلة بالأسفل</p>
                 </div>
               </div>
             )}
           </main>
 
-          <footer className="mt-12 flex flex-col sm:flex-row justify-between items-center no-print px-6 gap-6">
-            <button onClick={() => setCurrentStage(prev => Math.max(prev - 1, 1))} disabled={currentStage === 1} className="w-full sm:w-auto flex items-center justify-center gap-4 px-10 py-5 bg-white border-2 border-slate-200 rounded-[2rem] font-black text-slate-500 hover:bg-slate-50 transition-all disabled:opacity-30 shadow-sm">
-              <ChevronRight className="w-6 h-6" /> المرحلة السابقة
+          <footer className="mt-8 flex flex-col sm:flex-row justify-between items-center no-print px-6 gap-6">
+            <button onClick={() => setCurrentStage(prev => Math.max(prev - 1, 1))} disabled={currentStage === 1} className="w-full sm:w-auto flex items-center justify-center gap-4 px-8 py-4 bg-white border-2 border-slate-200 rounded-2xl font-black text-slate-500 hover:bg-slate-50 transition-all disabled:opacity-30 shadow-sm">
+              <ChevronRight className="w-5 h-5" /> المرحلة السابقة
             </button>
-            <button onClick={() => setCurrentStage(prev => Math.min(prev + 1, 3))} disabled={currentStage === 3 || state.groups.length === 0} className="w-full sm:w-auto flex items-center justify-center gap-4 px-14 py-5 bg-blue-600 text-white rounded-[2rem] font-black hover:bg-blue-700 transition-all shadow-2xl disabled:opacity-30">
-              الاستمرار للمرحلة التالية <ChevronLeft className="w-6 h-6" />
+            <button onClick={() => setCurrentStage(prev => Math.min(prev + 1, 3))} disabled={currentStage === 3 || state.groups.length === 0} className="w-full sm:w-auto flex items-center justify-center gap-4 px-12 py-4 bg-blue-600 text-white rounded-2xl font-black hover:bg-blue-700 transition-all shadow-xl disabled:opacity-30">
+              {currentStage === 3 ? 'إتمام العملية' : 'الاستمرار للمرحلة التالية'} <ChevronLeft className="w-5 h-5" />
             </button>
           </footer>
         </div>
       </div>
 
-      <div className={`preview-engine ${currentStage === Stage.FINAL_PREVIEW ? 'block' : 'hidden'} print:block bg-slate-300/30 sm:py-20 min-h-screen`}>
-        <div className="max-w-[210mm] print:max-w-none mx-auto flex flex-col items-center gap-[15mm] print:gap-0">
+      {/* Preview Container - Flexible Height and Dynamic width support */}
+      <div className={`preview-engine ${currentStage === Stage.FINAL_PREVIEW ? 'block' : 'hidden'} print:block bg-slate-200/50 sm:py-10 min-h-screen overflow-x-auto`}>
+        <div className="w-fit mx-auto flex flex-col items-center gap-[10mm] print:gap-0 px-4 sm:px-10 pb-20">
           
-          <div className="no-print mb-8 flex flex-col items-center gap-4">
-            <div className="flex items-center gap-3 bg-white px-8 py-3 rounded-full shadow-lg border border-slate-200">
+          <div className="no-print mb-4 flex flex-col items-center gap-4">
+            <div className="flex items-center gap-3 bg-white/90 backdrop-blur px-8 py-3 rounded-full shadow-md border border-slate-200">
               <Eye className="w-5 h-5 text-blue-600" />
-              <span className="font-black text-slate-800">وضع المعاينة النهائية والتحقق (A4)</span>
+              <span className="font-black text-slate-800 text-sm">معاينة صفحات الطباعة الفعلية</span>
             </div>
           </div>
 
           {activeGroup && currentCurriculum && (
-            <div className="flex flex-col items-center gap-[10mm] print:gap-0 w-full">
+            <div className="flex flex-col items-center gap-[15mm] print:gap-0 w-fit h-auto">
               {state.selectedPages.separator && (
                 <div className="print-page w-[210mm] h-[297mm] bg-white p-12 flex flex-col items-center justify-center shadow-xl overflow-hidden relative border border-slate-300 box-border">
                   <div className="border-[20px] border-double border-slate-900 p-20 w-full h-full flex flex-col items-center justify-center space-y-24">
@@ -601,9 +607,9 @@ const AttendancePage: React.FC<{ group: GroupData }> = ({ group }) => {
   const totalWeeks = academicYearMonths.reduce((sum, m) => sum + m.weeks, 0);
 
   return (
-    <div className="print-page landscape-page w-[297mm] h-[210mm] bg-white p-[5mm] shadow-xl border border-black flex flex-col overflow-hidden box-border">
+    <div className="print-page landscape-page w-[330mm] h-[210mm] bg-white p-[5mm] shadow-xl border border-black flex flex-col overflow-hidden box-border">
       <div className="flex justify-between items-center mb-[5px] border-b-[2px] border-black pb-[5px]">
-        <div className="info-box text-right text-[11px] font-bold leading-[1.4]">
+        <div className="text-right text-[11px] font-bold leading-[1.4]">
           <p>المؤسسة: <strong>{group.schoolName}</strong></p>
           <p>الأستاذ: <strong>الزايز محمد الطاهر</strong></p>
         </div>
@@ -615,7 +621,7 @@ const AttendancePage: React.FC<{ group: GroupData }> = ({ group }) => {
           <p className="text-[9px] font-bold mt-1">الموسم الدراسي: {group.academicYear}</p>
         </div>
         
-        <div className="info-box text-left text-[11px] font-bold leading-[1.4]">
+        <div className="text-left text-[11px] font-bold leading-[1.4]">
           <p>المستوى: <strong>{LEVEL_NAMES[group.level] || group.level} ({group.section})</strong></p>
           <p>المادة: <strong>تربية بدنية ورياضية</strong></p>
         </div>
