@@ -373,21 +373,24 @@ const App: React.FC = () => {
         </button>
       </footer>
 
-      {/* Advanced Full-Screen Preview Overlay */}
+      {/* Clean Full-Screen Preview Overlay without header info */}
       {currentStage === Stage.FINAL_PREVIEW && activeGroup && (
         <div className="preview-overlay no-print">
-          <div className="sticky top-0 w-full bg-white border-b px-8 py-5 flex items-center justify-between shadow-2xl z-[110]">
-             <div className="flex items-center gap-5">
-               <button onClick={() => setCurrentStage(Stage.DOC_SELECTION)} className="p-3 bg-slate-100 rounded-2xl text-slate-700 hover:bg-slate-200 transition-all hover:rotate-90">
-                  <X className="w-6 h-6" />
-               </button>
-               <div>
-                 <h3 className="font-black text-slate-900 text-xl tracking-tight">معاينة الوثائق الرسمية</h3>
-                 <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">فوج: {activeGroup.section} • {activeGroup.schoolName}</p>
-               </div>
-             </div>
-             <button onClick={() => window.print()} className="px-10 py-4 bg-blue-600 text-white rounded-2xl font-black flex items-center gap-3 shadow-xl hover:bg-blue-700 transition-all">
-                <Printer className="w-5 h-5" /> طباعة النسخة النهائية
+          {/* Discrete Floating Controls */}
+          <div className="floating-actions no-print">
+             <button 
+               onClick={() => setCurrentStage(Stage.DOC_SELECTION)} 
+               className="p-3 bg-red-50 text-red-600 rounded-full hover:bg-red-100 transition-all shadow-lg"
+               title="إغلاق المعاينة"
+             >
+                <X className="w-6 h-6" />
+             </button>
+             <button 
+               onClick={() => window.print()} 
+               className="px-8 py-3 bg-blue-600 text-white rounded-full font-black flex items-center gap-3 shadow-xl hover:bg-blue-700 transition-all"
+               title="طباعة"
+             >
+                <Printer className="w-5 h-5" /> طباعة الوثائق
              </button>
           </div>
 
