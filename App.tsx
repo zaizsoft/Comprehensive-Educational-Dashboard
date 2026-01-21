@@ -391,7 +391,6 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      {/* Preview Container - Ensuring no padding during print to avoid top white space */}
       <div className={`preview-engine ${currentStage === Stage.FINAL_PREVIEW ? 'block' : 'hidden'} print:block bg-slate-300/30 sm:py-20 min-h-screen`}>
         <div className="max-w-[210mm] print:max-w-none mx-auto flex flex-col items-center gap-[15mm] print:gap-0">
           
@@ -588,37 +587,54 @@ const PerformanceCardPage: React.FC<{ group: GroupData, curriculum: CurriculumCo
 
 const AttendancePage: React.FC<{ group: GroupData }> = ({ group }) => {
   const academicYearMonths = [
+    { name: "سبتمبر", weeks: 2 },
+    { name: "أكتوبر", weeks: 4 },
+    { name: "نوفمبر", weeks: 4 },
     { name: "ديسمبر", weeks: 2 },
     { name: "جانفي", weeks: 4 },
     { name: "فيفري", weeks: 4 },
     { name: "مارس", weeks: 4 },
+    { name: "أفريل", weeks: 4 },
+    { name: "ماي", weeks: 2 }
   ];
 
   const totalWeeks = academicYearMonths.reduce((sum, m) => sum + m.weeks, 0);
 
   return (
-    <div className="print-page landscape-page w-[297mm] h-[210mm] bg-white p-[8mm] shadow-xl border border-black flex flex-col overflow-hidden box-border">
-      <div className="flex justify-center items-center mb-[10px]">
+    <div className="print-page landscape-page w-[297mm] h-[210mm] bg-white p-[5mm] shadow-xl border border-black flex flex-col overflow-hidden box-border">
+      <div className="flex justify-between items-center mb-[5px] border-b-[2px] border-black pb-[5px]">
+        <div className="info-box text-right text-[11px] font-bold leading-[1.4]">
+          <p>المؤسسة: <strong>{group.schoolName}</strong></p>
+          <p>الأستاذ: <strong>الزايز محمد الطاهر</strong></p>
+        </div>
+        
         <div className="text-center">
-          <h2 className="text-[22px] font-black border-[2px] border-black px-[40px] py-[4px] rounded-full bg-[#f1f5f9] mx-auto inline-block">
-            سجل المناداة وتتبع الغياب
+          <h2 className="text-[20px] font-black border-[1.5px] border-black px-[30px] py-[2px] rounded-full bg-[#f1f5f9] mx-auto inline-block">
+            سجل المناداة وتتبع الغيابات
           </h2>
-          <p className="text-[11px] font-bold mt-1">الموسم الدراسي: {group.academicYear}</p>
+          <p className="text-[9px] font-bold mt-1">الموسم الدراسي: {group.academicYear}</p>
+        </div>
+        
+        <div className="info-box text-left text-[11px] font-bold leading-[1.4]">
+          <p>المستوى: <strong>{LEVEL_NAMES[group.level] || group.level} ({group.section})</strong></p>
+          <p>المادة: <strong>تربية بدنية ورياضية</strong></p>
         </div>
       </div>
 
-      <table className="w-full border-collapse table-fixed text-[9px] border-[1.5px] border-black">
+      <table className="w-full border-collapse border-[1px] border-black table-fixed">
         <thead>
-          <tr className="h-[24px] bg-[#f1f5f9]">
-            {academicYearMonths.reverse().map(m => (
-              <th key={m.name} className="border-[1.5px] border-black text-center font-black bg-[#e2e8f0]" colSpan={m.weeks}>
+          <tr className="h-[22px] bg-[#f1f5f9]">
+            <th className="border-[1px] border-black w-[25px] font-black text-[9px]" rowSpan={2}>ر</th>
+            <th className="border-[1px] border-black w-[160px] text-right pr-2 font-black text-[10px]" rowSpan={2}>اللقب والاسم</th>
+            {academicYearMonths.map(m => (
+              <th key={m.name} className="border-[1px] border-black text-center font-black bg-[#e2e8f0] text-[9px]" colSpan={m.weeks}>
                 {m.name}
               </th>
             ))}
           </tr>
-          <tr className="h-[20px] bg-[#f1f5f9] font-black">
-            {academicYearMonths.map(m => Array.from({ length: m.weeks }).reverse().map((_, i) => (
-              <th key={`${m.name}-${i}`} className="border border-black">أ{m.weeks - i}</th>
+          <tr className="h-[18px] bg-[#f1f5f9] font-black text-[8px]">
+            {academicYearMonths.map(m => Array.from({ length: m.weeks }).map((_, i) => (
+              <th key={`${m.name}-${i}`} className="border-[1px] border-black">أ{i + 1}</th>
             )))}
           </tr>
         </thead>
@@ -626,11 +642,11 @@ const AttendancePage: React.FC<{ group: GroupData }> = ({ group }) => {
           {Array.from({ length: 35 }).map((_, idx) => {
             const s = group.students[idx];
             return (
-              <tr key={idx} className="h-[4.5mm] border-b border-black">
+              <tr key={idx} className="h-[4.4mm] border-b border-black">
+                <td className="border-x border-black font-black text-center text-[9px] bg-[#f8fafc]">{idx + 1}</td>
+                <td className="border-x border-black text-right pr-2 font-bold text-[10px] overflow-hidden truncate">{s?.name || ''}</td>
                 {Array(totalWeeks).fill(0).map((_, weekIdx) => (
-                  <td key={weekIdx} className="border-x border-black text-center font-black text-red-600">
-                    {s?.isExempt && weekIdx < 11 ? 'X' : ''}
-                  </td>
+                  <td key={weekIdx} className="border-x border-black text-center font-black text-red-600"></td>
                 ))}
               </tr>
             );
@@ -638,7 +654,7 @@ const AttendancePage: React.FC<{ group: GroupData }> = ({ group }) => {
         </tbody>
       </table>
 
-      <div className="mt-auto flex justify-between items-center text-[10px] font-bold p-[4px_10px] bg-[#f8fafc] border-[1px] border-black rounded-[5px] no-print-mt-0">
+      <div className="mt-auto flex justify-between items-center text-[10px] font-bold p-[5px_10px] bg-[#f8fafc] border-[1.5px] border-black rounded-[5px]">
         <span>(غ): غائب | (م): متأخر | (ب): بدون بدلة | (ض): مريض | (X): معفي | حاضر: خانة فارغة</span>
         <span>توقيع الأستاذ: ............................</span>
       </div>
