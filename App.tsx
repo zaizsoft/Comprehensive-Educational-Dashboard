@@ -30,7 +30,8 @@ import {
   ArrowDown,
   ArrowLeft,
   ArrowRight,
-  MoveVertical
+  MoveVertical,
+  Settings
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { Stage, Student, AppState, GroupData, CurriculumConfig } from './types.ts';
@@ -402,90 +403,6 @@ const App: React.FC = () => {
       {currentStage === Stage.FINAL_PREVIEW && activeGroup && (
         <div className="preview-overlay no-print">
           
-          {/* Floating Action Menu */}
-          <div className="floating-actions no-print flex flex-col md:flex-row items-center gap-4">
-             {showSettings && (
-               <div className="absolute bottom-20 bg-white border border-slate-200 p-6 rounded-[2rem] shadow-2xl min-w-[320px] flex flex-col gap-5 animate-in slide-in-from-bottom-5 max-h-[70vh] overflow-y-auto custom-scrollbar">
-                 <h4 className="text-sm font-black text-slate-800 flex items-center gap-2 pb-2 border-b">
-                   <Settings2 className="w-4 h-4" /> إعدادات الهوامش والمحتوى
-                 </h4>
-                 
-                 <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-black text-slate-500 flex items-center gap-1"><ArrowUp className="w-3 h-3" /> الأعلى</label>
-                        <span className="text-[10px] font-bold text-blue-600">{previewSettings.marginTop}</span>
-                      </div>
-                      <input type="range" min="0" max="200" step="1" value={previewSettings.marginTop} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginTop: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-1 rounded-lg" />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-black text-slate-500 flex items-center gap-1"><ArrowDown className="w-3 h-3" /> الأسفل</label>
-                        <span className="text-[10px] font-bold text-blue-600">{previewSettings.marginBottom}</span>
-                      </div>
-                      <input type="range" min="0" max="200" step="1" value={previewSettings.marginBottom} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginBottom: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-1 rounded-lg" />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-black text-slate-500 flex items-center gap-1"><ArrowRight className="w-3 h-3" /> اليمين</label>
-                        <span className="text-[10px] font-bold text-blue-600">{previewSettings.marginRight}</span>
-                      </div>
-                      <input type="range" min="0" max="200" step="1" value={previewSettings.marginRight} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginRight: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-1 rounded-lg" />
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-black text-slate-500 flex items-center gap-1"><ArrowLeft className="w-3 h-3" /> اليسار</label>
-                        <span className="text-[10px] font-bold text-blue-600">{previewSettings.marginLeft}</span>
-                      </div>
-                      <input type="range" min="0" max="200" step="1" value={previewSettings.marginLeft} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginLeft: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-1 rounded-lg" />
-                    </div>
-                 </div>
-
-                 <div className="space-y-3 pt-2 border-t">
-                   <div className="flex items-center justify-between">
-                     <label className="text-[10px] font-black text-slate-500 flex items-center gap-2">
-                       <MoveVertical className="w-4 h-4" /> إزاحة المحتوى (مم)
-                     </label>
-                     <span className="text-[10px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">{previewSettings.verticalOffset}</span>
-                   </div>
-                   <div className="flex items-center gap-2">
-                      <button onClick={() => setPreviewSettings(prev => ({ ...prev, verticalOffset: prev.verticalOffset - 5 }))} className="p-1.5 bg-slate-100 hover:bg-slate-200 rounded transition-colors"><ArrowUp className="w-4 h-4" /></button>
-                      <input type="range" min="-500" max="500" step="1" value={previewSettings.verticalOffset} onChange={(e) => setPreviewSettings(prev => ({ ...prev, verticalOffset: parseInt(e.target.value) }))} className="flex-1 accent-emerald-600 h-1 bg-slate-100 rounded-lg" />
-                      <button onClick={() => setPreviewSettings(prev => ({ ...prev, verticalOffset: prev.verticalOffset + 5 }))} className="p-1.5 bg-slate-100 hover:bg-slate-200 rounded transition-colors"><ArrowDown className="w-4 h-4" /></button>
-                   </div>
-                 </div>
-
-                 <button onClick={() => setPreviewSettings({ marginTop: 5, marginBottom: 5, marginLeft: 5, marginRight: 5, verticalOffset: 0 })} className="w-full py-2 text-[10px] font-black bg-slate-100 text-slate-600 rounded-xl hover:bg-slate-200 transition-colors">
-                   إعادة تعيين الافتراضي (5مم)
-                 </button>
-               </div>
-             )}
-
-             <div className="flex items-center gap-3 bg-white p-2 rounded-full shadow-2xl border border-slate-100">
-               <button 
-                 onClick={() => setShowSettings(!showSettings)} 
-                 className={`p-3 rounded-full transition-all ${showSettings ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
-                 title="إعدادات القياسات"
-               >
-                  <Settings2 className="w-6 h-6" />
-               </button>
-               <div className="h-8 w-[1px] bg-slate-200"></div>
-               <button 
-                 onClick={() => window.print()} 
-                 className="px-8 py-3 bg-blue-600 text-white rounded-full font-black flex items-center gap-3 shadow-xl hover:bg-blue-700 transition-all"
-               >
-                  <Printer className="w-5 h-5" /> طباعة
-               </button>
-               <div className="h-8 w-[1px] bg-slate-200"></div>
-               <button 
-                 onClick={() => setCurrentStage(Stage.DOC_SELECTION)} 
-                 className="p-3 bg-red-50 text-red-600 rounded-full hover:bg-red-100 transition-all"
-               >
-                  <X className="w-6 h-6" />
-               </button>
-             </div>
-          </div>
-
           <div className="pages-container">
             {state.selectedPages.separator && (
               <div className="print-page portrait-page">
@@ -537,6 +454,112 @@ const App: React.FC = () => {
             {state.selectedPages.attendance && (
               <AttendancePage group={activeGroup} settings={previewSettings} />
             )}
+          </div>
+
+          {/* Floating Professional Action Bar (Matching Screenshot) */}
+          <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[300] flex flex-col items-center gap-6">
+             
+             {/* Settings Popover (Matching Screenshot) */}
+             {showSettings && (
+               <div className="bg-white border border-slate-200 p-10 rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(0,0,0,0.5)] min-w-[380px] flex flex-col gap-8 animate-in slide-in-from-bottom-10 duration-300">
+                 <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+                   <h4 className="text-lg font-black text-slate-800 flex items-center gap-3">
+                     <Settings className="w-6 h-6 text-blue-600" /> إعدادات الهوامش والمحتوى
+                   </h4>
+                 </div>
+                 
+                 {/* 2x2 Grid for Margins */}
+                 <div className="grid grid-cols-2 gap-x-12 gap-y-8">
+                    {/* Top */}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm font-black text-slate-600 flex items-center gap-2">الأعلى <ArrowUp className="w-4 h-4 opacity-30"/></label>
+                        <span className="text-sm font-black bg-blue-50 text-blue-700 px-3 py-1 rounded-full">{previewSettings.marginTop}</span>
+                      </div>
+                      <input type="range" min="0" max="500" step="1" value={previewSettings.marginTop} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginTop: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer" />
+                    </div>
+                    {/* Bottom */}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm font-black text-slate-600 flex items-center gap-2">الأسفل <ArrowDown className="w-4 h-4 opacity-30"/></label>
+                        <span className="text-sm font-black bg-blue-50 text-blue-700 px-3 py-1 rounded-full">{previewSettings.marginBottom}</span>
+                      </div>
+                      <input type="range" min="0" max="500" step="1" value={previewSettings.marginBottom} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginBottom: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer" />
+                    </div>
+                    {/* Right */}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm font-black text-slate-600 flex items-center gap-2">اليمين <ArrowRight className="w-4 h-4 opacity-30"/></label>
+                        <span className="text-sm font-black bg-blue-50 text-blue-700 px-3 py-1 rounded-full">{previewSettings.marginRight}</span>
+                      </div>
+                      <input type="range" min="0" max="500" step="1" value={previewSettings.marginRight} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginRight: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer" />
+                    </div>
+                    {/* Left */}
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <label className="text-sm font-black text-slate-600 flex items-center gap-2">اليسار <ArrowLeft className="w-4 h-4 opacity-30"/></label>
+                        <span className="text-sm font-black bg-blue-50 text-blue-700 px-3 py-1 rounded-full">{previewSettings.marginLeft}</span>
+                      </div>
+                      <input type="range" min="0" max="500" step="1" value={previewSettings.marginLeft} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginLeft: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer" />
+                    </div>
+                 </div>
+
+                 {/* Vertical Offset (Large Pill from Screenshot) */}
+                 <div className="space-y-6 pt-6 border-t border-slate-50">
+                   <div className="flex items-center justify-between">
+                     <label className="text-sm font-black text-slate-600 flex items-center gap-3">
+                       <MoveVertical className="w-5 h-5 text-emerald-600" /> إزاحة المحتوى (مم)
+                     </label>
+                     <div className="w-12 h-12 flex items-center justify-center bg-emerald-100 text-emerald-800 font-black rounded-full text-lg shadow-inner">
+                        {previewSettings.verticalOffset}
+                     </div>
+                   </div>
+                   <div className="flex items-center gap-4">
+                      <button onClick={() => setPreviewSettings(prev => ({ ...prev, verticalOffset: Math.max(-1000, prev.verticalOffset - 5) }))} className="p-3 bg-slate-100 hover:bg-slate-200 rounded-2xl transition-all shadow-sm">
+                        <ArrowUp className="w-6 h-6 text-slate-600" />
+                      </button>
+                      <input type="range" min="-1000" max="1000" step="1" value={previewSettings.verticalOffset} onChange={(e) => setPreviewSettings(prev => ({ ...prev, verticalOffset: parseInt(e.target.value) }))} className="flex-1 accent-emerald-600 h-2 bg-slate-100 rounded-lg appearance-none cursor-pointer" />
+                      <button onClick={() => setPreviewSettings(prev => ({ ...prev, verticalOffset: Math.min(1000, prev.verticalOffset + 5) }))} className="p-3 bg-slate-100 hover:bg-slate-200 rounded-2xl transition-all shadow-sm">
+                        <ArrowDown className="w-6 h-6 text-slate-600" />
+                      </button>
+                   </div>
+                 </div>
+
+                 <button 
+                  onClick={() => setPreviewSettings({ marginTop: 5, marginBottom: 5, marginLeft: 5, marginRight: 5, verticalOffset: 0 })}
+                  className="w-full py-3 text-xs font-black text-slate-400 hover:text-slate-600 transition-colors uppercase tracking-widest"
+                 >
+                   إعادة الضبط الافتراضي (5مم)
+                 </button>
+               </div>
+             )}
+
+             {/* Main Bar (Matching Screenshot Button Structure) */}
+             <div className="flex items-center gap-5 bg-white/90 backdrop-blur-xl px-4 py-3 rounded-full shadow-[0_20px_40px_rgba(0,0,0,0.4)] border border-white/20">
+               {/* Close Button */}
+               <button 
+                 onClick={() => setCurrentStage(Stage.DOC_SELECTION)} 
+                 className="w-16 h-16 flex items-center justify-center bg-red-50 text-red-500 rounded-full hover:bg-red-100 hover:scale-110 transition-all shadow-sm group"
+               >
+                  <X className="w-8 h-8 group-hover:rotate-90 transition-transform duration-300" />
+               </button>
+
+               {/* Print Button (Large Pill) */}
+               <button 
+                 onClick={() => window.print()} 
+                 className="flex items-center gap-5 px-14 h-16 bg-blue-600 text-white rounded-full font-black text-xl hover:bg-blue-700 hover:scale-[1.03] active:scale-95 transition-all shadow-[0_10px_25px_rgba(37,99,235,0.4)]"
+               >
+                  <Printer className="w-7 h-7" /> طباعة
+               </button>
+
+               {/* Settings Toggle Button (Black Circle) */}
+               <button 
+                 onClick={() => setShowSettings(!showSettings)} 
+                 className={`w-16 h-16 flex items-center justify-center rounded-full transition-all shadow-sm ${showSettings ? 'bg-slate-900 text-white rotate-180' : 'bg-slate-100 text-slate-700 hover:bg-slate-200'}`}
+               >
+                  <Settings2 className="w-8 h-8" />
+               </button>
+             </div>
           </div>
         </div>
       )}
