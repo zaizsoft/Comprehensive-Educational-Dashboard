@@ -22,7 +22,15 @@ import {
   ChevronDown,
   Eye,
   Download,
-  X
+  X,
+  Settings2,
+  Maximize,
+  Minimize,
+  ArrowUp,
+  ArrowDown,
+  ArrowLeft,
+  ArrowRight,
+  MoveVertical
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { Stage, Student, AppState, GroupData, CurriculumConfig } from './types.ts';
@@ -45,6 +53,14 @@ const ARABIC_LEVEL_TO_NUM: Record<string, string> = {
   "خامسة": "5", "الخامسة": "5"
 };
 
+interface PreviewSettings {
+  marginTop: number;
+  marginBottom: number;
+  marginLeft: number;
+  marginRight: number;
+  verticalOffset: number;
+}
+
 const App: React.FC = () => {
   const [currentStage, setCurrentStage] = useState<Stage>(Stage.DATA_IMPORT);
   const [state, setState] = useState<AppState>({
@@ -58,6 +74,15 @@ const App: React.FC = () => {
       separator: false
     }
   });
+
+  const [previewSettings, setPreviewSettings] = useState<PreviewSettings>({
+    marginTop: 5,
+    marginBottom: 5,
+    marginLeft: 5,
+    marginRight: 5,
+    verticalOffset: 0
+  });
+  const [showSettings, setShowSettings] = useState(false);
 
   const [aiObservations, setAiObservations] = useState<Record<number, string>>({});
   const [isGeneratingAi, setIsGeneratingAi] = useState(false);
@@ -373,25 +398,91 @@ const App: React.FC = () => {
         </button>
       </footer>
 
-      {/* Clean Full-Screen Preview Overlay without header info */}
+      {/* Full-Screen Preview Overlay */}
       {currentStage === Stage.FINAL_PREVIEW && activeGroup && (
         <div className="preview-overlay no-print">
-          {/* Discrete Floating Controls */}
-          <div className="floating-actions no-print">
-             <button 
-               onClick={() => setCurrentStage(Stage.DOC_SELECTION)} 
-               className="p-3 bg-red-50 text-red-600 rounded-full hover:bg-red-100 transition-all shadow-lg"
-               title="إغلاق المعاينة"
-             >
-                <X className="w-6 h-6" />
-             </button>
-             <button 
-               onClick={() => window.print()} 
-               className="px-8 py-3 bg-blue-600 text-white rounded-full font-black flex items-center gap-3 shadow-xl hover:bg-blue-700 transition-all"
-               title="طباعة"
-             >
-                <Printer className="w-5 h-5" /> طباعة الوثائق
-             </button>
+          
+          {/* Floating Action Menu */}
+          <div className="floating-actions no-print flex flex-col md:flex-row items-center gap-4">
+             {showSettings && (
+               <div className="absolute bottom-20 bg-white border border-slate-200 p-6 rounded-[2rem] shadow-2xl min-w-[320px] flex flex-col gap-5 animate-in slide-in-from-bottom-5 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                 <h4 className="text-sm font-black text-slate-800 flex items-center gap-2 pb-2 border-b">
+                   <Settings2 className="w-4 h-4" /> إعدادات الهوامش والمحتوى
+                 </h4>
+                 
+                 <div className="grid grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[10px] font-black text-slate-500 flex items-center gap-1"><ArrowUp className="w-3 h-3" /> الأعلى</label>
+                        <span className="text-[10px] font-bold text-blue-600">{previewSettings.marginTop}</span>
+                      </div>
+                      <input type="range" min="0" max="40" step="1" value={previewSettings.marginTop} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginTop: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-1 rounded-lg" />
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[10px] font-black text-slate-500 flex items-center gap-1"><ArrowDown className="w-3 h-3" /> الأسفل</label>
+                        <span className="text-[10px] font-bold text-blue-600">{previewSettings.marginBottom}</span>
+                      </div>
+                      <input type="range" min="0" max="40" step="1" value={previewSettings.marginBottom} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginBottom: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-1 rounded-lg" />
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[10px] font-black text-slate-500 flex items-center gap-1"><ArrowRight className="w-3 h-3" /> اليمين</label>
+                        <span className="text-[10px] font-bold text-blue-600">{previewSettings.marginRight}</span>
+                      </div>
+                      <input type="range" min="0" max="40" step="1" value={previewSettings.marginRight} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginRight: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-1 rounded-lg" />
+                    </div>
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <label className="text-[10px] font-black text-slate-500 flex items-center gap-1"><ArrowLeft className="w-3 h-3" /> اليسار</label>
+                        <span className="text-[10px] font-bold text-blue-600">{previewSettings.marginLeft}</span>
+                      </div>
+                      <input type="range" min="0" max="40" step="1" value={previewSettings.marginLeft} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginLeft: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-1 rounded-lg" />
+                    </div>
+                 </div>
+
+                 <div className="space-y-3 pt-2 border-t">
+                   <div className="flex items-center justify-between">
+                     <label className="text-[10px] font-black text-slate-500 flex items-center gap-2">
+                       <MoveVertical className="w-4 h-4" /> إزاحة المحتوى (مم)
+                     </label>
+                     <span className="text-[10px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">{previewSettings.verticalOffset}</span>
+                   </div>
+                   <div className="flex items-center gap-2">
+                      <button onClick={() => setPreviewSettings(prev => ({ ...prev, verticalOffset: prev.verticalOffset - 1 }))} className="p-1.5 bg-slate-100 hover:bg-slate-200 rounded transition-colors"><ArrowUp className="w-4 h-4" /></button>
+                      <input type="range" min="-100" max="100" step="1" value={previewSettings.verticalOffset} onChange={(e) => setPreviewSettings(prev => ({ ...prev, verticalOffset: parseInt(e.target.value) }))} className="flex-1 accent-emerald-600 h-1 bg-slate-100 rounded-lg" />
+                      <button onClick={() => setPreviewSettings(prev => ({ ...prev, verticalOffset: prev.verticalOffset + 1 }))} className="p-1.5 bg-slate-100 hover:bg-slate-200 rounded transition-colors"><ArrowDown className="w-4 h-4" /></button>
+                   </div>
+                 </div>
+
+                 <button onClick={() => setPreviewSettings({ marginTop: 5, marginBottom: 5, marginLeft: 5, marginRight: 5, verticalOffset: 0 })} className="w-full py-2 text-[10px] font-black bg-slate-100 text-slate-600 rounded-xl hover:bg-slate-200 transition-colors">
+                   إعادة تعيين الافتراضي (5مم)
+                 </button>
+               </div>
+             )}
+
+             <div className="flex items-center gap-3 bg-white p-2 rounded-full shadow-2xl border border-slate-100">
+               <button 
+                 onClick={() => setShowSettings(!showSettings)} 
+                 className={`p-3 rounded-full transition-all ${showSettings ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+               >
+                  <Settings2 className="w-6 h-6" />
+               </button>
+               <div className="h-8 w-[1px] bg-slate-200"></div>
+               <button 
+                 onClick={() => window.print()} 
+                 className="px-8 py-3 bg-blue-600 text-white rounded-full font-black flex items-center gap-3 shadow-xl hover:bg-blue-700 transition-all"
+               >
+                  <Printer className="w-5 h-5" /> طباعة
+               </button>
+               <div className="h-8 w-[1px] bg-slate-200"></div>
+               <button 
+                 onClick={() => setCurrentStage(Stage.DOC_SELECTION)} 
+                 className="p-3 bg-red-50 text-red-600 rounded-full hover:bg-red-100 transition-all"
+               >
+                  <X className="w-6 h-6" />
+               </button>
+             </div>
           </div>
 
           <div className="pages-container">
@@ -415,19 +506,21 @@ const App: React.FC = () => {
 
             {state.selectedPages.diagnostic && (
               <AssessmentPage 
-                title="تقويم التشخييصللكفاءة الختامية" 
+                title="تقويم التشخيصي للكفاءة الختامية" 
                 group={activeGroup} 
                 curriculum={currentCurriculum!} 
                 observations={aiObservations} 
+                settings={previewSettings}
               />
             )}
 
             {state.selectedPages.summative && (
               <AssessmentPage 
-                title="تقويم التحصييل للكفاءة الختامية" 
+                title="تقويم التحصيلي للكفاءة الختامية" 
                 group={activeGroup} 
                 curriculum={currentCurriculum!} 
                 observations={aiObservations} 
+                settings={previewSettings}
               />
             )}
 
@@ -436,11 +529,12 @@ const App: React.FC = () => {
                 group={activeGroup} 
                 curriculum={currentCurriculum!} 
                 observations={aiObservations} 
+                settings={previewSettings}
               />
             )}
 
             {state.selectedPages.attendance && (
-              <AttendancePage group={activeGroup} />
+              <AttendancePage group={activeGroup} settings={previewSettings} />
             )}
           </div>
         </div>
@@ -449,65 +543,81 @@ const App: React.FC = () => {
   );
 };
 
-const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: CurriculumConfig, observations: Record<number, string> }> = ({ title, group, curriculum, observations }) => (
-  <div className="print-page portrait-page border border-black p-[5mm] flex flex-col">
-    {/* Header Title Pill */}
-    <div className="text-center mb-1">
-      <div className="border-[2px] border-black px-14 py-1.5 inline-block rounded-[30px] font-black text-2xl bg-white shadow-sm">
-        {title}
+const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: CurriculumConfig, observations: Record<number, string>, settings: PreviewSettings }> = ({ title, group, curriculum, observations, settings }) => (
+  <div 
+    className="print-page portrait-page border border-black flex flex-col"
+    style={{ 
+      paddingTop: `${settings.marginTop}mm`, 
+      paddingBottom: `${settings.marginBottom}mm`, 
+      paddingLeft: `${settings.marginLeft}mm`, 
+      paddingRight: `${settings.marginRight}mm` 
+    }}
+  >
+    <div style={{ marginTop: `${settings.verticalOffset}mm` }}>
+      {/* Header Pill Title */}
+      <div className="text-center mb-2">
+        <div className="border-[2px] border-black px-16 py-1.5 inline-block rounded-[35px] font-black text-[22px] bg-white leading-tight">
+          {title}
+        </div>
       </div>
-    </div>
-    
-    {/* Info Box (2 Columns) */}
-    <div className="flex justify-between items-start text-[11px] font-bold mb-1 px-4">
-      <div className="space-y-0.5 text-right w-1/2">
-        <p>المؤسسة: <span className="font-black">مدرسة {group.schoolName}</span></p>
-        <p>المستوى: <span className="font-black">{LEVEL_NAMES[group.level] || group.level} {group.section}</span></p>
-        <p>الأستاذ: <span className="font-black">الزايز محمد الطاهر</span></p>
+      
+      {/* Header Info Info (Exactly like the image) */}
+      <div className="flex justify-between items-start text-[11.5px] font-bold mb-1.5 px-1">
+        <div className="space-y-0.5 text-right w-1/2">
+          <p>المؤسسة: <span className="font-black">مدرسة {group.schoolName}</span></p>
+          <p>المستوى: <span className="font-black">{LEVEL_NAMES[group.level] || group.level} ({group.section.replace(/[()]/g, '')})</span></p>
+          <p>الأستاذ: <span className="font-black">الزايز محمد الطاهر</span></p>
+        </div>
+        <div className="space-y-0.5 text-left w-1/2">
+          <p>السنة الدراسية: <span className="font-black">{group.academicYear}</span></p>
+          <p>الميدان: <span className="font-black">{TERM_MAPPING[group.term]}</span></p>
+          <p>الفصل: <span className="font-black">{group.term}</span></p>
+        </div>
       </div>
-      <div className="space-y-0.5 text-left w-1/2">
-        <p>السنة الدراسية: <span className="font-black">{group.academicYear}</span></p>
-        <p>الميدان: <span className="font-black">{TERM_MAPPING[group.term]}</span></p>
-        <p>الفصل: <span className="font-black">{group.term}</span></p>
+
+      {/* Competency Line Box */}
+      <div className="border-[1.5px] border-black py-1.5 px-3 mb-1.5 font-black text-[11px] bg-white leading-tight">
+        الكفاءة الختامية: {curriculum.kafaa}
+      </div>
+
+      {/* Criteria Section Box */}
+      <div className="border-[1.5px] border-black mb-2 relative p-2 pt-3.5 bg-white">
+        <div className="absolute -top-3 right-1/2 translate-x-1/2 px-5 bg-white text-[12px] font-black border-x border-black">المعاييــــــــــــــــــــــــــــــــــــــــر</div>
+        <div className="grid grid-cols-2 text-[10.5px] font-bold gap-x-8 leading-[1.3]">
+          {/* Right side (Criteria 1 & 2) */}
+          <div className="space-y-0.5">
+            <p>1- {curriculum.criteria[0]}</p>
+            <p>2- {curriculum.criteria[1]}</p>
+          </div>
+          {/* Left side (Criteria 3 & 4) */}
+          <div className="space-y-0.5">
+            <p>3- {curriculum.criteria[2]}</p>
+            <p>4- {curriculum.criteria[3]}</p>
+          </div>
+        </div>
       </div>
     </div>
 
-    {/* Competency Line */}
-    <div className="border-y-[1.5px] border-black py-1 mb-1 font-black text-[10.5px] bg-white text-center leading-none">
-      الكفاءة الختامية: {curriculum.kafaa}
-    </div>
-
-    {/* Criteria Section */}
-    <div className="border-[1.5px] border-black mb-1.5 relative p-1.5 pt-3.5 bg-white">
-      <div className="absolute -top-3 right-1/2 translate-x-1/2 px-4 bg-white text-[11px] font-black border-[1.5px] border-black">المعاييــــــــــــــــــــــــــــــــــــــــر</div>
-      <div className="grid grid-cols-2 text-[10px] font-bold gap-x-6 gap-y-0.5 leading-tight">
-        <div>1- {curriculum.criteria[0]}</div>
-        <div>3- {curriculum.criteria[2]}</div>
-        <div>2- {curriculum.criteria[1]}</div>
-        <div>4- {curriculum.criteria[3]}</div>
-      </div>
-    </div>
-
-    {/* Assessment Table */}
+    {/* Main Assessment Table */}
     <table className="flex-grow w-full border-collapse">
       <thead>
-        <tr className="h-6 bg-white">
-          <th rowSpan={2} className="w-[30px] font-black text-[10px] p-0 border-black border-[1px]">رقم</th>
-          <th rowSpan={2} className="w-[180px] text-right pr-3 font-black text-[10.5px] p-0 border-black border-[1px]">اللقب والاسم</th>
-          <th colSpan={4} className="text-[10px] font-black p-0 border-black border-[1px]">المعيار الأول</th>
-          <th colSpan={4} className="text-[10px] font-black p-0 border-black border-[1px]">المعيار الثاني</th>
-          <th colSpan={4} className="text-[10px] font-black p-0 border-black border-[1px]">المعيار الثالث</th>
-          <th colSpan={4} className="text-[10px] font-black p-0 border-black border-[1px]">المعيار الرابع</th>
-          <th colSpan={4} className="text-[10px] font-black bg-slate-50 p-0 border-black border-[1px]">الكفاءة الختامية</th>
-          <th rowSpan={2} className="w-[100px] font-black text-[10.5px] p-0 border-black border-[1px]">المالحظة</th>
+        <tr className="h-7 bg-white">
+          <th rowSpan={2} className="w-[30px] font-black text-[11px] p-0 border-black border-[1.5px]">ر</th>
+          <th rowSpan={2} className="w-[200px] text-center font-black text-[11px] p-0 border-black border-[1.5px]">اللقب والاسم</th>
+          <th colSpan={4} className="text-[10px] font-black p-0 border-black border-[1.5px]">المعيار 1</th>
+          <th colSpan={4} className="text-[10px] font-black p-0 border-black border-[1.5px]">المعيار 2</th>
+          <th colSpan={4} className="text-[10px] font-black p-0 border-black border-[1.5px]">المعيار 3</th>
+          <th colSpan={4} className="text-[10px] font-black p-0 border-black border-[1.5px]">المعيار 4</th>
+          <th colSpan={4} className="text-[10px] font-black p-0 border-black border-[1.5px]">الكفاءة الختامية</th>
+          <th rowSpan={2} className="w-[110px] font-black text-[11px] p-0 border-black border-[1.5px]">الملاحظة</th>
         </tr>
-        <tr className="h-5 bg-white text-[9.5px] font-black">
+        <tr className="h-5 bg-white text-[10px] font-black">
           {Array(5).fill(0).map((_, gIdx) => (
             <React.Fragment key={gIdx}>
-              <th className="w-5 p-0 border-black border-[1px]">أ</th>
-              <th className="w-5 p-0 border-black border-[1px]">ب</th>
-              <th className="w-5 p-0 border-black border-[1px]">ج</th>
-              <th className="w-5 p-0 border-black border-[1px]">د</th>
+              <th className="w-[18px] p-0 border-black border-[1.5px]">أ</th>
+              <th className="w-[18px] p-0 border-black border-[1.5px]">ب</th>
+              <th className="w-[18px] p-0 border-black border-[1.5px]">ج</th>
+              <th className="w-[18px] p-0 border-black border-[1.5px]">د</th>
             </React.Fragment>
           ))}
         </tr>
@@ -516,17 +626,17 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
         {Array.from({ length: 35 }).map((_, idx) => {
           const s = group.students[idx];
           return (
-            <tr key={idx} className={`h-[5.8mm] ${s?.isExempt ? 'bg-red-50/50' : ''}`}>
-              <td className="font-black text-center text-[10px] p-0 border-black border-[1px]">{idx + 1}</td>
-              <td className={`text-right pr-3 font-bold text-[10.5px] p-0 truncate max-w-[180px] border-black border-[1px] ${s?.isExempt ? 'text-red-600 line-through italic opacity-50' : 'text-slate-900'}`}>
+            <tr key={idx} className={`h-[5.8mm] ${s?.isExempt ? 'bg-red-50/30' : ''}`}>
+              <td className="font-black text-center text-[10.5px] p-0 border-black border-[1.5px]">{idx + 1}</td>
+              <td className={`text-right pr-3 font-bold text-[11px] p-0 truncate max-w-[200px] border-black border-[1.5px] ${s?.isExempt ? 'text-red-600 italic opacity-60' : 'text-slate-900'}`}>
                 {s?.name || ''}
               </td>
               {s?.isExempt ? (
-                 <td colSpan={21} className="text-[9.5px] text-red-600 font-black italic text-center p-0 border-black border-[1px]">معفي</td>
+                 <td colSpan={21} className="text-[10px] text-red-600 font-black italic text-center p-0 border-black border-[1.5px]">معفي من الممارسة</td>
               ) : (
                 <>
-                  {Array(20).fill(0).map((_, i) => <td key={i} className="p-0 border-black border-[1px]"></td>)}
-                  <td className="text-[7.5px] font-black text-blue-800 px-1 leading-none text-center truncate border-black border-[1px]">{observations[s?.id] || ''}</td>
+                  {Array(20).fill(0).map((_, i) => <td key={i} className="p-0 border-black border-[1.5px]"></td>)}
+                  <td className="text-[7.5px] font-black text-blue-900 px-1 leading-none text-center truncate border-black border-[1.5px]">{observations[s?.id] || ''}</td>
                 </>
               )}
             </tr>
@@ -534,80 +644,82 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
         })}
       </tbody>
     </table>
-
-    {/* Legend Footer */}
-    <div className="mt-1.5 pt-1.5 flex justify-around text-[10.5px] font-black border-t-[2px] border-black bg-white p-1">
-        <span>د= تملك محدود (3/0)</span>
-        <span>ج= تملك جزئي (3/1)</span>
-        <span>ب= تملك مقبول (3/2)</span>
-        <span>أ= تملك أقىص (3/3)</span>
-    </div>
   </div>
 );
 
-const PerformanceCardPage: React.FC<{ group: GroupData, curriculum: CurriculumConfig, observations: Record<number, string> }> = ({ group, curriculum, observations }) => (
-  <div className="print-page portrait-page border border-black p-[5mm] flex flex-col">
-    <div className="text-center mb-1">
-      <div className="border-[2px] border-black inline-block px-10 py-1 rounded-lg bg-slate-50 shadow-sm">
-        <h2 className="text-lg font-black tracking-tight">بطاقة تقييم أداء التلاميذ</h2>
+const PerformanceCardPage: React.FC<{ group: GroupData, curriculum: CurriculumConfig, observations: Record<number, string>, settings: PreviewSettings }> = ({ group, curriculum, observations, settings }) => (
+  <div 
+    className="print-page portrait-page border border-black flex flex-col"
+    style={{ 
+      paddingTop: `${settings.marginTop}mm`, 
+      paddingBottom: `${settings.marginBottom}mm`, 
+      paddingLeft: `${settings.marginLeft}mm`, 
+      paddingRight: `${settings.marginRight}mm` 
+    }}
+  >
+    <div style={{ marginTop: `${settings.verticalOffset}mm` }}>
+      <div className="text-center mb-1">
+        <div className="border-[2px] border-black inline-block px-10 py-1 rounded-lg bg-slate-50 shadow-sm">
+          <h2 className="text-lg font-black tracking-tight">بطاقة تقييم أداء التلاميذ</h2>
+        </div>
       </div>
-    </div>
 
-    <div className="flex justify-between text-[11px] font-bold mb-1 px-1">
-      <div className="space-y-0.5 text-right w-1/2">
-        <p>المؤسسة: <span className="font-black">مدرسة {group.schoolName}</span></p>
-        <p>المستوى: <span className="font-black">{LEVEL_NAMES[group.level] || group.level} {group.section}</span></p>
-        <p>الأستاذ: <span className="font-black">الزايز محمد الطاهر</span></p>
+      <div className="flex justify-between text-[11px] font-bold mb-1 px-1">
+        <div className="space-y-0.5 text-right w-1/2">
+          <p>المؤسسة: <span className="font-black">مدرسة {group.schoolName}</span></p>
+          <p>المستوى: <span className="font-black">{LEVEL_NAMES[group.level] || group.level} {group.section}</span></p>
+          <p>الأستاذ: <span className="font-black">الزايز محمد الطاهر</span></p>
+        </div>
+        <div className="space-y-0.5 text-left w-1/2">
+          <p>السنة الدراسية: <span className="font-black">{group.academicYear}</span></p>
+          <p>الميدان: <span className="font-black">{TERM_MAPPING[group.term]}</span></p>
+          <p>الفصل: <span className="font-black">{group.term}</span></p>
+        </div>
       </div>
-      <div className="space-y-0.5 text-left w-1/2">
-        <p>السنة الدراسية: <span className="font-black">{group.academicYear}</span></p>
-        <p>الميدان: <span className="font-black">{TERM_MAPPING[group.term]}</span></p>
-        <p>الفصل: <span className="font-black">{group.term}</span></p>
-      </div>
-    </div>
 
-    <div className="border-[1.5px] border-black bg-slate-50 p-1 mb-1.5 text-center text-[10.5px] font-black rounded-md italic leading-tight shadow-sm">
-      "يتم تقييم التلميذ بشكل مستمر عن طريق رصد دائم للأداء، مع مراعاة الجوانب الانضباطية والتقنية والسلوك الرياضي القويم."
+      <div className="border-[1.5px] border-black bg-slate-50 p-1 mb-1.5 text-center text-[10.5px] font-black rounded-md italic leading-tight shadow-sm">
+        "يتم تقييم التلميذ بشكل مستمر عن طريق رصد دائم للأداء، مع مراعاة الجوانب الانضباطية والتقنية والسلوك الرياضي القويم."
+      </div>
     </div>
 
     <table className="flex-grow mb-1 w-full border-collapse">
       <thead>
         <tr className="h-6 bg-slate-100">
-          <th className="w-[40px] font-black text-[10.5px] p-0 border-black border-[1px]">رقم</th>
-          <th className="w-[200px] text-right pr-4 font-black text-[10.5px] p-0 border-black border-[1px]">اللقب والاسم</th>
-          <th colSpan={3} className="font-black text-[10px] bg-emerald-50 p-0 border-black border-[1px]">الانضباط (5ن)</th>
-          <th colSpan={2} className="font-black text-[10px] bg-blue-50 p-0 border-black border-[1px]">التقني (5ن)</th>
-          <th className="w-[50px] font-black text-red-600 text-[10.5px] p-0 border-black border-[1px]">العلامة</th>
-          <th className="w-[120px] font-black text-[10.5px] p-0 border-black border-[1px]">الملاحظة</th>
+          <th className="w-[40px] font-black text-[10.5px] p-0 border-black border-[1.5px]">رقم</th>
+          <th className="w-[200px] text-right pr-4 font-black text-[10.5px] p-0 border-black border-[1.5px]">اللقب والاسم</th>
+          <th colSpan={3} className="font-black text-[10px] bg-emerald-50 p-0 border-black border-[1.5px]">الانضباط (5ن)</th>
+          <th colSpan={2} className="font-black text-[10px] bg-blue-50 p-0 border-black border-[1.5px]">التقني (5ن)</th>
+          <th className="w-[50px] font-black text-red-600 text-[10.5px] p-0 border-black border-[1.5px]">العلامة</th>
+          <th className="w-[120px] font-black text-[10.5px] p-0 border-black border-[1.5px]">الملاحظة</th>
         </tr>
         <tr className="h-5 bg-slate-100 text-[9px] font-black">
-          <th colSpan={2} className="p-0 border-black border-[1px]"></th>
-          <th className="w-12 p-0 border-black border-[1px]">حضور</th>
-          <th className="w-12 p-0 border-black border-[1px]">بذلة</th>
-          <th className="w-12 p-0 border-black border-[1px]">سلوك</th>
-          <th className="w-12 p-0 border-black border-[1px]">مشاركة</th>
-          <th className="w-12 p-0 border-black border-[1px]">تنسيق</th>
-          <th colSpan={2} className="p-0 border-black border-[1px]"></th>
+          <th colSpan={2} className="p-0 border-black border-[1.5px]"></th>
+          <th className="w-12 p-0 border-black border-[1.5px]">حضور</th>
+          <th className="w-12 p-0 border-black border-[1.5px]">بذلة</th>
+          <th className="w-12 p-0 border-black border-[1.5px]">سلوك</th>
+          <th className="w-12 p-0 border-black border-[1.5px]">مشاركة</th>
+          <th className="w-12 p-0 border-black border-[1.5px]">تنسيق</th>
+          <th colSpan={2} className="p-0 border-black border-[1.5px]"></th>
         </tr>
       </thead>
       <tbody>
         {Array.from({ length: 35 }).map((_, idx) => {
           const s = group.students[idx];
           return (
-            <tr key={idx} className={`h-[6.0mm] ${s?.isExempt ? 'bg-red-50/50' : ''}`}>
-              <td className="font-black text-center text-[10px] bg-slate-50/50 p-0 border-black border-[1px]">{idx + 1}</td>
-              <td className={`text-right pr-4 font-bold text-[10.5px] p-0 truncate max-w-[200px] border-black border-[1px] ${s?.isExempt ? 'text-red-600 line-through opacity-50' : 'text-slate-900'}`}>{s?.name || ''}</td>
+            <tr key={idx} className={`h-[6.0mm] ${s?.isExempt ? 'bg-red-50/30' : ''}`}>
+              <td className="font-black text-center text-[10px] bg-slate-50/50 p-0 border-black border-[1.5px]">{idx + 1}</td>
+              <td className={`text-right pr-4 font-bold text-[10.5px] p-0 truncate max-w-[200px] border-black border-[1.5px] ${s?.isExempt ? 'text-red-600 line-through opacity-50' : 'text-slate-900'}`}>{s?.name || ''}</td>
               {s?.isExempt ? (
-                <td colSpan={7} className="text-[10px] text-red-600 font-black italic text-center p-0 border-black border-[1px]">تلميذ معفي</td>
+                <td colSpan={7} className="text-[10px] text-red-600 font-black italic text-center p-0 border-black border-[1.5px]">تلميذ معفي</td>
               ) : (
                 <>
-                  <td className="p-0 border-black border-[1px]"></td>
-                  <td className="p-0 border-black border-[1px]"></td>
-                  <td className="p-0 border-black border-[1px]"></td>
-                  <td className="p-0 border-black border-[1px]"></td>
-                  <td className="p-0 border-black border-[1px]"></td>
-                  <td className="p-0 border-black border-[1px]"></td>
-                  <td className="text-[8px] font-black text-blue-900 leading-none px-1 text-center truncate p-0 border-black border-[1px]">{observations[s?.id] || ''}</td>
+                  <td className="p-0 border-black border-[1.5px]"></td>
+                  <td className="p-0 border-black border-[1.5px]"></td>
+                  <td className="p-0 border-black border-[1.5px]"></td>
+                  <td className="p-0 border-black border-[1.5px]"></td>
+                  <td className="p-0 border-black border-[1.5px]"></td>
+                  <td className="p-0 border-black border-[1.5px]"></td>
+                  <td className="text-[8px] font-black text-blue-900 leading-none px-1 text-center truncate p-0 border-black border-[1.5px]">{observations[s?.id] || ''}</td>
                 </>
               )}
             </tr>
@@ -625,7 +737,7 @@ const PerformanceCardPage: React.FC<{ group: GroupData, curriculum: CurriculumCo
   </div>
 );
 
-const AttendancePage: React.FC<{ group: GroupData }> = ({ group }) => {
+const AttendancePage: React.FC<{ group: GroupData, settings: PreviewSettings }> = ({ group, settings }) => {
   const academicYearMonths = [
     { name: "سبتمبر", weeks: 2 },
     { name: "أكتوبر", weeks: 4 },
@@ -641,8 +753,19 @@ const AttendancePage: React.FC<{ group: GroupData }> = ({ group }) => {
   const totalWeeks = academicYearMonths.reduce((sum, m) => sum + m.weeks, 0);
 
   return (
-    <div className="print-page landscape-page border-[2px] border-black p-[4mm] flex flex-col">
-      <div className="flex justify-between items-center mb-1.5 border-b-[2.5px] border-black pb-2 bg-slate-50 p-3 rounded-t-md">
+    <div 
+      className="print-page landscape-page border-[2px] border-black flex flex-col"
+      style={{ 
+        paddingTop: `${settings.marginTop}mm`, 
+        paddingBottom: `${settings.marginBottom}mm`, 
+        paddingLeft: `${settings.marginLeft}mm`, 
+        paddingRight: `${settings.marginRight}mm` 
+      }}
+    >
+      <div 
+        className="flex justify-between items-center mb-1.5 border-b-[2.5px] border-black pb-2 bg-slate-50 p-3 rounded-t-md"
+        style={{ marginTop: `${settings.verticalOffset}mm` }}
+      >
         <div className="text-right text-[10px] font-black leading-tight w-1/4">
           <p>المؤسسة: <span className="text-blue-700">مدرسة {group.schoolName}</span></p>
           <p>الأستاذ: <span className="text-blue-700">الزايز محمد الطاهر</span></p>
@@ -665,17 +788,17 @@ const AttendancePage: React.FC<{ group: GroupData }> = ({ group }) => {
         <table className="w-full border-collapse">
           <thead>
             <tr className="h-5 bg-slate-200">
-              <th className="w-[25px] font-black text-[10px] p-0 border-black border-[1px]" rowSpan={2}>ر</th>
-              <th className="w-[180px] text-right pr-3 font-black text-[10.5px] p-0 border-black border-[1px]" rowSpan={2}>اللقب والاسم الكامل</th>
+              <th className="w-[25px] font-black text-[10px] p-0 border-black border-[1.5px]" rowSpan={2}>ر</th>
+              <th className="w-[180px] text-right pr-3 font-black text-[10.5px] p-0 border-black border-[1.5px]" rowSpan={2}>اللقب والاسم الكامل</th>
               {academicYearMonths.map(m => (
-                <th key={m.name} className="text-center font-black bg-slate-300 text-[9.5px] border-x border-black p-0 border-black border-[1px]" colSpan={m.weeks}>
+                <th key={m.name} className="text-center font-black bg-slate-300 text-[9.5px] border-x border-black p-0 border-black border-[1.5px]" colSpan={m.weeks}>
                   {m.name}
                 </th>
               ))}
             </tr>
             <tr className="h-4.5 bg-slate-200 font-black text-[8.5px]">
               {academicYearMonths.map(m => Array.from({ length: m.weeks }).map((_, i) => (
-                <th key={`${m.name}-${i}`} className="w-6 border-x border-slate-400 p-0 border-black border-[1px]">أ{i + 1}</th>
+                <th key={`${m.name}-${i}`} className="w-6 border-x border-slate-400 p-0 border-black border-[1.5px]">أ{i + 1}</th>
               )))}
             </tr>
           </thead>
@@ -683,15 +806,15 @@ const AttendancePage: React.FC<{ group: GroupData }> = ({ group }) => {
             {Array.from({ length: 35 }).map((_, idx) => {
               const s = group.students[idx];
               return (
-                <tr key={idx} className={`h-[5.4mm] ${s?.isExempt ? 'bg-red-50/50' : (idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/10')}`}>
-                  <td className="font-black text-center text-[9px] bg-slate-100 p-0 border-black border-[1px]">{idx + 1}</td>
-                  <td className={`text-right pr-3 font-bold text-[10.5px] p-0 truncate max-w-[180px] border-black border-[1px] ${s?.isExempt ? 'text-red-600 line-through opacity-50' : 'text-slate-900'}`}>
+                <tr key={idx} className={`h-[5.4mm] ${s?.isExempt ? 'bg-red-50/30' : (idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/10')}`}>
+                  <td className="font-black text-center text-[9px] bg-slate-100 p-0 border-black border-[1.5px]">{idx + 1}</td>
+                  <td className={`text-right pr-3 font-bold text-[10.5px] p-0 truncate max-w-[180px] border-black border-[1.5px] ${s?.isExempt ? 'text-red-600 line-through opacity-50' : 'text-slate-900'}`}>
                     {s?.name || ''}
                   </td>
                   {s?.isExempt ? (
-                    <td colSpan={totalWeeks} className="text-[9px] text-red-600 font-black italic text-center p-0 border-black border-[1px]">تلميذ معفي</td>
+                    <td colSpan={totalWeeks} className="text-[9px] text-red-600 font-black italic text-center p-0 border-black border-[1.5px]">تلميذ معفي</td>
                   ) : (
-                    Array(totalWeeks).fill(0).map((_, weekIdx) => <td key={weekIdx} className="border-x border-slate-200 p-0 border-black border-[1px]"></td>)
+                    Array(totalWeeks).fill(0).map((_, weekIdx) => <td key={weekIdx} className="border-x border-slate-200 p-0 border-black border-[1.5px]"></td>)
                   )}
                 </tr>
               );
