@@ -398,7 +398,7 @@ const App: React.FC = () => {
         </button>
       </footer>
 
-      {/* Full-Screen Preview Overlay */}
+      {/* Advanced Full-Screen Preview Overlay with Discrete Controls */}
       {currentStage === Stage.FINAL_PREVIEW && activeGroup && (
         <div className="preview-overlay no-print">
           
@@ -465,6 +465,7 @@ const App: React.FC = () => {
                <button 
                  onClick={() => setShowSettings(!showSettings)} 
                  className={`p-3 rounded-full transition-all ${showSettings ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-600 hover:bg-slate-200'}`}
+                 title="إعدادات القياسات"
                >
                   <Settings2 className="w-6 h-6" />
                </button>
@@ -555,13 +556,13 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
   >
     <div style={{ marginTop: `${settings.verticalOffset}mm` }}>
       {/* Header Pill Title */}
-      <div className="text-center mb-2">
-        <div className="border-[2px] border-black px-16 py-1.5 inline-block rounded-[35px] font-black text-[22px] bg-white leading-tight">
+      <div className="text-center mb-3">
+        <div className="border-[2px] border-black px-16 py-1.5 inline-block rounded-[35px] font-black text-[24px] bg-white leading-tight shadow-sm">
           {title}
         </div>
       </div>
       
-      {/* Header Info Info (Exactly like the image) */}
+      {/* Header Info Layout (Identical to Image) */}
       <div className="flex justify-between items-start text-[11.5px] font-bold mb-1.5 px-1">
         <div className="space-y-0.5 text-right w-1/2">
           <p>المؤسسة: <span className="font-black">مدرسة {group.schoolName}</span></p>
@@ -575,22 +576,22 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
         </div>
       </div>
 
-      {/* Competency Line Box */}
-      <div className="border-[1.5px] border-black py-1.5 px-3 mb-1.5 font-black text-[11px] bg-white leading-tight">
+      {/* Competency Full-Width Box */}
+      <div className="border-[2px] border-black py-2 px-4 mb-2 font-black text-[12px] bg-white text-center leading-tight shadow-sm">
         الكفاءة الختامية: {curriculum.kafaa}
       </div>
 
-      {/* Criteria Section Box */}
-      <div className="border-[1.5px] border-black mb-2 relative p-2 pt-3.5 bg-white">
-        <div className="absolute -top-3 right-1/2 translate-x-1/2 px-5 bg-white text-[12px] font-black border-x border-black">المعاييــــــــــــــــــــــــــــــــــــــــر</div>
-        <div className="grid grid-cols-2 text-[10.5px] font-bold gap-x-8 leading-[1.3]">
-          {/* Right side (Criteria 1 & 2) */}
-          <div className="space-y-0.5">
+      {/* Criteria Section (Centered Title on Border) */}
+      <div className="border-[1.8px] border-black mb-2.5 relative p-2.5 pt-4 bg-white shadow-sm">
+        <div className="absolute -top-3.5 right-1/2 translate-x-1/2 px-6 bg-white text-[13px] font-black border-x-[1.8px] border-black h-7 flex items-center">المعاييــــــــــــــــــــــــــــــــــــــــر</div>
+        <div className="grid grid-cols-2 text-[11px] font-bold gap-x-12 leading-[1.4]">
+          {/* Right Column: 1 & 2 */}
+          <div className="space-y-1">
             <p>1- {curriculum.criteria[0]}</p>
             <p>2- {curriculum.criteria[1]}</p>
           </div>
-          {/* Left side (Criteria 3 & 4) */}
-          <div className="space-y-0.5">
+          {/* Left Column: 3 & 4 */}
+          <div className="space-y-1">
             <p>3- {curriculum.criteria[2]}</p>
             <p>4- {curriculum.criteria[3]}</p>
           </div>
@@ -598,26 +599,26 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
       </div>
     </div>
 
-    {/* Main Assessment Table */}
+    {/* Main Dynamic Assessment Table */}
     <table className="flex-grow w-full border-collapse">
       <thead>
-        <tr className="h-7 bg-white">
-          <th rowSpan={2} className="w-[30px] font-black text-[11px] p-0 border-black border-[1.5px]">ر</th>
-          <th rowSpan={2} className="w-[200px] text-center font-black text-[11px] p-0 border-black border-[1.5px]">اللقب والاسم</th>
-          <th colSpan={4} className="text-[10px] font-black p-0 border-black border-[1.5px]">المعيار 1</th>
-          <th colSpan={4} className="text-[10px] font-black p-0 border-black border-[1.5px]">المعيار 2</th>
-          <th colSpan={4} className="text-[10px] font-black p-0 border-black border-[1.5px]">المعيار 3</th>
-          <th colSpan={4} className="text-[10px] font-black p-0 border-black border-[1.5px]">المعيار 4</th>
-          <th colSpan={4} className="text-[10px] font-black p-0 border-black border-[1.5px]">الكفاءة الختامية</th>
-          <th rowSpan={2} className="w-[110px] font-black text-[11px] p-0 border-black border-[1.5px]">الملاحظة</th>
+        <tr className="h-8 bg-white">
+          <th rowSpan={2} className="w-[35px] font-black text-[12px] p-0 border-black border-[1.8px]">رقم</th>
+          <th rowSpan={2} className="w-[220px] text-center font-black text-[12px] p-0 border-black border-[1.8px]">اللقب والاسم</th>
+          <th colSpan={4} className="text-[10.5px] font-black p-0 border-black border-[1.8px]">المعيار 1</th>
+          <th colSpan={4} className="text-[10.5px] font-black p-0 border-black border-[1.8px]">المعيار 2</th>
+          <th colSpan={4} className="text-[10.5px] font-black p-0 border-black border-[1.8px]">المعيار 3</th>
+          <th colSpan={4} className="text-[10.5px] font-black p-0 border-black border-[1.8px]">المعيار 4</th>
+          <th colSpan={4} className="text-[10.5px] font-black p-0 border-black border-[1.8px]">الكفاءة الختامية</th>
+          <th rowSpan={2} className="w-[120px] font-black text-[11px] p-0 border-black border-[1.8px]">الملاحظة</th>
         </tr>
         <tr className="h-5 bg-white text-[10px] font-black">
           {Array(5).fill(0).map((_, gIdx) => (
             <React.Fragment key={gIdx}>
-              <th className="w-[18px] p-0 border-black border-[1.5px]">أ</th>
-              <th className="w-[18px] p-0 border-black border-[1.5px]">ب</th>
-              <th className="w-[18px] p-0 border-black border-[1.5px]">ج</th>
-              <th className="w-[18px] p-0 border-black border-[1.5px]">د</th>
+              <th className="w-[19px] p-0 border-black border-[1.5px]">أ</th>
+              <th className="w-[19px] p-0 border-black border-[1.5px]">ب</th>
+              <th className="w-[19px] p-0 border-black border-[1.5px]">ج</th>
+              <th className="w-[19px] p-0 border-black border-[1.5px]">د</th>
             </React.Fragment>
           ))}
         </tr>
@@ -626,17 +627,17 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
         {Array.from({ length: 35 }).map((_, idx) => {
           const s = group.students[idx];
           return (
-            <tr key={idx} className={`h-[5.8mm] ${s?.isExempt ? 'bg-red-50/30' : ''}`}>
-              <td className="font-black text-center text-[10.5px] p-0 border-black border-[1.5px]">{idx + 1}</td>
-              <td className={`text-right pr-3 font-bold text-[11px] p-0 truncate max-w-[200px] border-black border-[1.5px] ${s?.isExempt ? 'text-red-600 italic opacity-60' : 'text-slate-900'}`}>
+            <tr key={idx} className={`h-[6.0mm] ${s?.isExempt ? 'bg-red-50/40' : (idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/5')}`}>
+              <td className="font-black text-center text-[11px] p-0 border-black border-[1.5px]">{idx + 1}</td>
+              <td className={`text-right pr-3 font-bold text-[11.5px] p-0 truncate max-w-[220px] border-black border-[1.5px] ${s?.isExempt ? 'text-red-600 italic opacity-60' : 'text-slate-900'}`}>
                 {s?.name || ''}
               </td>
               {s?.isExempt ? (
-                 <td colSpan={21} className="text-[10px] text-red-600 font-black italic text-center p-0 border-black border-[1.5px]">معفي من الممارسة</td>
+                 <td colSpan={21} className="text-[10.5px] text-red-600 font-black italic text-center p-0 border-black border-[1.5px]">معفي من الممارسة</td>
               ) : (
                 <>
                   {Array(20).fill(0).map((_, i) => <td key={i} className="p-0 border-black border-[1.5px]"></td>)}
-                  <td className="text-[7.5px] font-black text-blue-900 px-1 leading-none text-center truncate border-black border-[1.5px]">{observations[s?.id] || ''}</td>
+                  <td className="text-[8px] font-black text-blue-800 px-1 leading-none text-center truncate border-black border-[1.5px]">{observations[s?.id] || ''}</td>
                 </>
               )}
             </tr>
@@ -685,12 +686,12 @@ const PerformanceCardPage: React.FC<{ group: GroupData, curriculum: CurriculumCo
     <table className="flex-grow mb-1 w-full border-collapse">
       <thead>
         <tr className="h-6 bg-slate-100">
-          <th className="w-[40px] font-black text-[10.5px] p-0 border-black border-[1.5px]">رقم</th>
-          <th className="w-[200px] text-right pr-4 font-black text-[10.5px] p-0 border-black border-[1.5px]">اللقب والاسم</th>
-          <th colSpan={3} className="font-black text-[10px] bg-emerald-50 p-0 border-black border-[1.5px]">الانضباط (5ن)</th>
-          <th colSpan={2} className="font-black text-[10px] bg-blue-50 p-0 border-black border-[1.5px]">التقني (5ن)</th>
-          <th className="w-[50px] font-black text-red-600 text-[10.5px] p-0 border-black border-[1.5px]">العلامة</th>
-          <th className="w-[120px] font-black text-[10.5px] p-0 border-black border-[1.5px]">الملاحظة</th>
+          <th className="w-[40px] font-black text-[10.5px] p-0 border-black border-[1.8px]">رقم</th>
+          <th className="w-[220px] text-right pr-4 font-black text-[10.5px] p-0 border-black border-[1.8px]">اللقب والاسم</th>
+          <th colSpan={3} className="font-black text-[10px] bg-emerald-50 p-0 border-black border-[1.8px]">الانضباط (5ن)</th>
+          <th colSpan={2} className="font-black text-[10px] bg-blue-50 p-0 border-black border-[1.8px]">التقني (5ن)</th>
+          <th className="w-[50px] font-black text-red-600 text-[10.5px] p-0 border-black border-[1.8px]">العلامة</th>
+          <th className="w-[120px] font-black text-[10.5px] p-0 border-black border-[1.8px]">الملاحظة</th>
         </tr>
         <tr className="h-5 bg-slate-100 text-[9px] font-black">
           <th colSpan={2} className="p-0 border-black border-[1.5px]"></th>
@@ -706,9 +707,9 @@ const PerformanceCardPage: React.FC<{ group: GroupData, curriculum: CurriculumCo
         {Array.from({ length: 35 }).map((_, idx) => {
           const s = group.students[idx];
           return (
-            <tr key={idx} className={`h-[6.0mm] ${s?.isExempt ? 'bg-red-50/30' : ''}`}>
+            <tr key={idx} className={`h-[6.2mm] ${s?.isExempt ? 'bg-red-50/30' : ''}`}>
               <td className="font-black text-center text-[10px] bg-slate-50/50 p-0 border-black border-[1.5px]">{idx + 1}</td>
-              <td className={`text-right pr-4 font-bold text-[10.5px] p-0 truncate max-w-[200px] border-black border-[1.5px] ${s?.isExempt ? 'text-red-600 line-through opacity-50' : 'text-slate-900'}`}>{s?.name || ''}</td>
+              <td className={`text-right pr-4 font-bold text-[11px] p-0 truncate max-w-[220px] border-black border-[1.5px] ${s?.isExempt ? 'text-red-600 line-through opacity-50' : 'text-slate-900'}`}>{s?.name || ''}</td>
               {s?.isExempt ? (
                 <td colSpan={7} className="text-[10px] text-red-600 font-black italic text-center p-0 border-black border-[1.5px]">تلميذ معفي</td>
               ) : (
@@ -788,17 +789,17 @@ const AttendancePage: React.FC<{ group: GroupData, settings: PreviewSettings }> 
         <table className="w-full border-collapse">
           <thead>
             <tr className="h-5 bg-slate-200">
-              <th className="w-[25px] font-black text-[10px] p-0 border-black border-[1.5px]" rowSpan={2}>ر</th>
-              <th className="w-[180px] text-right pr-3 font-black text-[10.5px] p-0 border-black border-[1.5px]" rowSpan={2}>اللقب والاسم الكامل</th>
+              <th className="w-[30px] font-black text-[10.5px] p-0 border-black border-[1.8px]" rowSpan={2}>ر</th>
+              <th className="w-[220px] text-right pr-3 font-black text-[11px] p-0 border-black border-[1.8px]" rowSpan={2}>اللقب والاسم الكامل</th>
               {academicYearMonths.map(m => (
-                <th key={m.name} className="text-center font-black bg-slate-300 text-[9.5px] border-x border-black p-0 border-black border-[1.5px]" colSpan={m.weeks}>
+                <th key={m.name} className="text-center font-black bg-slate-300 text-[10px] border-x border-black p-0 border-black border-[1.8px]" colSpan={m.weeks}>
                   {m.name}
                 </th>
               ))}
             </tr>
-            <tr className="h-4.5 bg-slate-200 font-black text-[8.5px]">
+            <tr className="h-4.5 bg-slate-200 font-black text-[9px]">
               {academicYearMonths.map(m => Array.from({ length: m.weeks }).map((_, i) => (
-                <th key={`${m.name}-${i}`} className="w-6 border-x border-slate-400 p-0 border-black border-[1.5px]">أ{i + 1}</th>
+                <th key={`${m.name}-${i}`} className="w-7 border-x border-slate-400 p-0 border-black border-[1.5px]">أ{i + 1}</th>
               )))}
             </tr>
           </thead>
@@ -806,13 +807,13 @@ const AttendancePage: React.FC<{ group: GroupData, settings: PreviewSettings }> 
             {Array.from({ length: 35 }).map((_, idx) => {
               const s = group.students[idx];
               return (
-                <tr key={idx} className={`h-[5.4mm] ${s?.isExempt ? 'bg-red-50/30' : (idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/10')}`}>
-                  <td className="font-black text-center text-[9px] bg-slate-100 p-0 border-black border-[1.5px]">{idx + 1}</td>
-                  <td className={`text-right pr-3 font-bold text-[10.5px] p-0 truncate max-w-[180px] border-black border-[1.5px] ${s?.isExempt ? 'text-red-600 line-through opacity-50' : 'text-slate-900'}`}>
+                <tr key={idx} className={`h-[5.5mm] ${s?.isExempt ? 'bg-red-50/30' : (idx % 2 === 0 ? 'bg-white' : 'bg-slate-50/10')}`}>
+                  <td className="font-black text-center text-[10px] bg-slate-100 p-0 border-black border-[1.5px]">{idx + 1}</td>
+                  <td className={`text-right pr-3 font-bold text-[11px] p-0 truncate max-w-[220px] border-black border-[1.5px] ${s?.isExempt ? 'text-red-600 line-through opacity-50' : 'text-slate-900'}`}>
                     {s?.name || ''}
                   </td>
                   {s?.isExempt ? (
-                    <td colSpan={totalWeeks} className="text-[9px] text-red-600 font-black italic text-center p-0 border-black border-[1.5px]">تلميذ معفي</td>
+                    <td colSpan={totalWeeks} className="text-[10px] text-red-600 font-black italic text-center p-0 border-black border-[1.5px]">تلميذ معفي</td>
                   ) : (
                     Array(totalWeeks).fill(0).map((_, weekIdx) => <td key={weekIdx} className="border-x border-slate-200 p-0 border-black border-[1.5px]"></td>)
                   )}
@@ -823,17 +824,17 @@ const AttendancePage: React.FC<{ group: GroupData, settings: PreviewSettings }> 
         </table>
       </div>
 
-      <div className="mt-1.5 flex justify-between items-center text-[9.5px] font-black p-1.5 bg-slate-900 text-white rounded border border-slate-800">
-        <div className="flex gap-4">
+      <div className="mt-1.5 flex justify-between items-center text-[10px] font-black p-2 bg-slate-900 text-white rounded border border-slate-800">
+        <div className="flex gap-6">
           <span>غ: غائب</span>
           <span>م: متأخر</span>
           <span>ب: بدون بدلة</span>
           <span>ض: مريض</span>
           <span>X: معفي</span>
         </div>
-        <div className="text-[11px] font-black flex items-center gap-2">
+        <div className="text-[12px] font-black flex items-center gap-3">
            <span>توقيع الأستاذ:</span>
-           <div className="w-24 border-b border-white border-dashed"></div>
+           <div className="w-28 border-b border-white border-dashed"></div>
         </div>
       </div>
     </div>
