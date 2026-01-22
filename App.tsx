@@ -31,7 +31,8 @@ import {
   ArrowLeft,
   ArrowRight,
   MoveVertical,
-  Settings
+  Settings,
+  RotateCcw
 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 import { Stage, Student, AppState, GroupData, CurriculumConfig } from './types.ts';
@@ -200,6 +201,7 @@ const App: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50">
+      {/* Header - No Print */}
       <div className="no-print bg-white border-b sticky top-0 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto p-4 sm:p-6">
           <header className="flex flex-col lg:flex-row items-center justify-between gap-6">
@@ -399,7 +401,7 @@ const App: React.FC = () => {
         </button>
       </footer>
 
-      {/* Advanced Full-Screen Preview Overlay with Discrete Controls */}
+      {/* Full-Screen Preview Overlay */}
       {currentStage === Stage.FINAL_PREVIEW && activeGroup && (
         <div className="preview-overlay">
           
@@ -456,12 +458,12 @@ const App: React.FC = () => {
             )}
           </div>
 
-          {/* Floating Professional Action Bar (No-Print) */}
+          {/* Floating Actions UI (Strictly No-Print) */}
           <div className="no-print fixed bottom-10 left-1/2 -translate-x-1/2 z-[300] flex flex-col items-center gap-6 w-full max-w-4xl px-4">
              
-             {/* Settings Popover (Matching Screenshot Style) */}
+             {/* Settings Popover */}
              {showSettings && (
-               <div className="bg-white border border-slate-200 p-8 sm:p-10 rounded-[3rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.6)] w-full max-w-md flex flex-col gap-8 animate-in slide-in-from-bottom-12 duration-500">
+               <div className="bg-white border border-slate-200 p-8 sm:p-10 rounded-[3rem] shadow-[0_40px_80px_-20px_rgba(0,0,0,0.6)] w-full max-w-lg flex flex-col gap-8 animate-in slide-in-from-bottom-12 duration-500">
                  <div className="flex items-center justify-between pb-6 border-b border-slate-100">
                    <h4 className="text-xl font-black text-slate-800 flex items-center gap-4">
                      <Settings className="w-8 h-8 text-blue-600" /> إعدادات الهوامش والمحتوى
@@ -469,7 +471,7 @@ const App: React.FC = () => {
                    <button onClick={() => setShowSettings(false)} className="p-2 hover:bg-slate-100 rounded-full transition-colors"><X className="w-6 h-6 text-slate-400"/></button>
                  </div>
                  
-                 {/* 2x2 Grid for Margins - Extended Ranges (1000mm) */}
+                 {/* 2x2 Grid for Margins - Ranges up to 1000mm */}
                  <div className="grid grid-cols-2 gap-x-10 gap-y-10">
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
@@ -501,13 +503,13 @@ const App: React.FC = () => {
                     </div>
                  </div>
 
-                 {/* Vertical Offset (Matching Green Circle Pill in Screenshot) */}
+                 {/* Vertical Offset - Ranges up to 2000mm */}
                  <div className="space-y-6 pt-8 border-t border-slate-50">
                    <div className="flex items-center justify-between">
                      <label className="text-sm font-black text-slate-600 flex items-center gap-3">
                        <MoveVertical className="w-6 h-6 text-emerald-600" /> إزاحة المحتوى (مم)
                      </label>
-                     <div className="w-14 h-14 flex items-center justify-center bg-emerald-100 text-emerald-800 font-black rounded-full text-xl shadow-md border-2 border-emerald-50">
+                     <div className="w-16 h-16 flex items-center justify-center bg-emerald-100 text-emerald-800 font-black rounded-full text-xl shadow-md border-2 border-emerald-50">
                         {previewSettings.verticalOffset}
                      </div>
                    </div>
@@ -524,37 +526,35 @@ const App: React.FC = () => {
 
                  <button 
                   onClick={() => setPreviewSettings({ marginTop: 5, marginBottom: 5, marginLeft: 5, marginRight: 5, verticalOffset: 0 })}
-                  className="w-full py-4 text-xs font-black text-slate-400 hover:text-red-500 transition-colors uppercase tracking-widest border border-slate-50 rounded-2xl hover:bg-red-50"
+                  className="w-full py-4 text-xs font-black text-slate-400 hover:text-blue-600 transition-colors uppercase tracking-widest border border-slate-50 rounded-2xl hover:bg-blue-50 flex items-center justify-center gap-2"
                  >
-                   إعادة الضبط الافتراضي للمعاينة
+                   <RotateCcw className="w-4 h-4" /> إعادة الضبط الافتراضي (5 مم)
                  </button>
                </div>
              )}
 
-             {/* Main Bar (Matching Screenshot UI Components) */}
-             <div className="flex items-center gap-6 bg-white/95 backdrop-blur-2xl px-6 py-4 rounded-[3.5rem] shadow-[0_25px_60px_rgba(0,0,0,0.5)] border border-white/30">
-               {/* Close Button - Red Circle with X */}
+             {/* Main Professional Bar */}
+             <div className="flex items-center gap-6 bg-white/95 backdrop-blur-3xl px-6 py-4 rounded-[4rem] shadow-[0_30px_70px_rgba(0,0,0,0.6)] border border-white/40">
+               {/* Close - Red Circle */}
                <button 
                  onClick={() => setCurrentStage(Stage.DOC_SELECTION)} 
                  className="w-16 h-16 flex items-center justify-center bg-red-50 text-red-500 rounded-full hover:bg-red-100 hover:scale-110 active:scale-95 transition-all shadow-lg group"
-                 title="إغلاق المعاينة"
                >
                   <X className="w-8 h-8 group-hover:rotate-90 transition-transform duration-300" />
                </button>
 
-               {/* Print Button - Large Blue Pill */}
+               {/* Print - Large Blue Pill */}
                <button 
                  onClick={() => window.print()} 
-                 className="flex items-center gap-6 px-16 h-18 bg-blue-600 text-white rounded-full font-black text-2xl hover:bg-blue-700 hover:scale-[1.05] active:scale-95 transition-all shadow-[0_15px_35px_rgba(37,99,235,0.5)] ring-4 ring-blue-600/10"
+                 className="flex items-center gap-6 px-16 h-18 bg-blue-600 text-white rounded-full font-black text-2xl hover:bg-blue-700 hover:scale-[1.05] active:scale-95 transition-all shadow-[0_15px_35px_rgba(37,99,235,0.6)] ring-4 ring-blue-600/10"
                >
-                  <Printer className="w-8 h-8" /> طباعة الوثائق
+                  <Printer className="w-8 h-8" /> طباعة
                </button>
 
-               {/* Settings Toggle - Dark/Black Circle with Icon */}
+               {/* Settings Toggle - Dark Circle */}
                <button 
                  onClick={() => setShowSettings(!showSettings)} 
                  className={`w-16 h-16 flex items-center justify-center rounded-full transition-all shadow-lg ${showSettings ? 'bg-slate-900 text-white rotate-180' : 'bg-slate-100 text-slate-800 hover:bg-slate-200 hover:scale-110'}`}
-                 title="إعدادات القياسات"
                >
                   <Settings2 className="w-9 h-9" />
                </button>
@@ -565,9 +565,6 @@ const App: React.FC = () => {
     </div>
   );
 };
-
-// ... Remaining sub-components (AssessmentPage, PerformanceCardPage, AttendancePage) are identical in structure ...
-// Ensure the table structure matches the reference image precisely.
 
 const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: CurriculumConfig, observations: Record<number, string>, settings: PreviewSettings }> = ({ title, group, curriculum, observations, settings }) => (
   <div 
@@ -587,7 +584,7 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
         </div>
       </div>
       
-      {/* Header Info Layout (Matching Image) */}
+      {/* Header Info Layout */}
       <div className="flex justify-between items-start text-[12px] font-bold mb-2 px-1">
         <div className="space-y-0.5 text-right w-1/2">
           <p>المؤسسة: <span className="font-black">مدرسة {group.schoolName}</span></p>
@@ -606,7 +603,7 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
         الكفاءة الختامية: {curriculum.kafaa}
       </div>
 
-      {/* Criteria Section (Centered Title on Border) */}
+      {/* Criteria Section */}
       <div className="border-[2px] border-black mb-3 relative p-3 pt-4.5 bg-white shadow-sm">
         <div className="absolute -top-4 right-1/2 translate-x-1/2 px-8 bg-white text-[14px] font-black border-x-[2px] border-black h-8 flex items-center">المعاييــــــــــــــــــــــــــــــــــــــــر</div>
         <div className="grid grid-cols-2 text-[11.5px] font-bold gap-x-14 leading-[1.5]">
@@ -622,7 +619,7 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
       </div>
     </div>
 
-    {/* Table - 35 Students */}
+    {/* Table */}
     <table className="flex-grow w-full border-collapse">
       <thead>
         <tr className="h-9 bg-white">
@@ -668,6 +665,17 @@ const AssessmentPage: React.FC<{ title: string, group: GroupData, curriculum: Cu
         })}
       </tbody>
     </table>
+
+    {/* Legend Footer */}
+    <div className="mt-2 border-t-[2px] border-black pt-1.5 flex justify-between items-center text-[11px] font-black px-2">
+      <div className="flex gap-10">
+        <span>أ: تحكم أقصى</span>
+        <span>ب: تحكم مقبول</span>
+        <span>ج: تحكم جزئي</span>
+        <span>د: تحكم محدود</span>
+      </div>
+      <div className="w-40 border-b border-black border-dashed h-4"></div>
+    </div>
   </div>
 );
 
@@ -847,6 +855,7 @@ const AttendancePage: React.FC<{ group: GroupData, settings: PreviewSettings }> 
         </table>
       </div>
 
+      {/* Legend Footer */}
       <div className="mt-2 flex justify-between items-center text-[11px] font-black p-3 bg-slate-900 text-white rounded-xl border border-slate-800 shadow-xl">
         <div className="flex gap-8">
           <span className="flex items-center gap-1"><div className="w-3 h-3 rounded-full bg-red-500"></div> غ: غائب</span>
