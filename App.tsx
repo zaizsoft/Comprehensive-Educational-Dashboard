@@ -416,28 +416,28 @@ const App: React.FC = () => {
                         <label className="text-[10px] font-black text-slate-500 flex items-center gap-1"><ArrowUp className="w-3 h-3" /> الأعلى</label>
                         <span className="text-[10px] font-bold text-blue-600">{previewSettings.marginTop}</span>
                       </div>
-                      <input type="range" min="0" max="40" step="1" value={previewSettings.marginTop} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginTop: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-1 rounded-lg" />
+                      <input type="range" min="0" max="200" step="1" value={previewSettings.marginTop} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginTop: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-1 rounded-lg" />
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <label className="text-[10px] font-black text-slate-500 flex items-center gap-1"><ArrowDown className="w-3 h-3" /> الأسفل</label>
                         <span className="text-[10px] font-bold text-blue-600">{previewSettings.marginBottom}</span>
                       </div>
-                      <input type="range" min="0" max="40" step="1" value={previewSettings.marginBottom} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginBottom: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-1 rounded-lg" />
+                      <input type="range" min="0" max="200" step="1" value={previewSettings.marginBottom} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginBottom: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-1 rounded-lg" />
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <label className="text-[10px] font-black text-slate-500 flex items-center gap-1"><ArrowRight className="w-3 h-3" /> اليمين</label>
                         <span className="text-[10px] font-bold text-blue-600">{previewSettings.marginRight}</span>
                       </div>
-                      <input type="range" min="0" max="40" step="1" value={previewSettings.marginRight} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginRight: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-1 rounded-lg" />
+                      <input type="range" min="0" max="200" step="1" value={previewSettings.marginRight} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginRight: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-1 rounded-lg" />
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
                         <label className="text-[10px] font-black text-slate-500 flex items-center gap-1"><ArrowLeft className="w-3 h-3" /> اليسار</label>
                         <span className="text-[10px] font-bold text-blue-600">{previewSettings.marginLeft}</span>
                       </div>
-                      <input type="range" min="0" max="40" step="1" value={previewSettings.marginLeft} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginLeft: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-1 rounded-lg" />
+                      <input type="range" min="0" max="200" step="1" value={previewSettings.marginLeft} onChange={(e) => setPreviewSettings(prev => ({ ...prev, marginLeft: parseInt(e.target.value) }))} className="w-full accent-blue-600 h-1 rounded-lg" />
                     </div>
                  </div>
 
@@ -449,9 +449,9 @@ const App: React.FC = () => {
                      <span className="text-[10px] font-black bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">{previewSettings.verticalOffset}</span>
                    </div>
                    <div className="flex items-center gap-2">
-                      <button onClick={() => setPreviewSettings(prev => ({ ...prev, verticalOffset: prev.verticalOffset - 1 }))} className="p-1.5 bg-slate-100 hover:bg-slate-200 rounded transition-colors"><ArrowUp className="w-4 h-4" /></button>
-                      <input type="range" min="-100" max="100" step="1" value={previewSettings.verticalOffset} onChange={(e) => setPreviewSettings(prev => ({ ...prev, verticalOffset: parseInt(e.target.value) }))} className="flex-1 accent-emerald-600 h-1 bg-slate-100 rounded-lg" />
-                      <button onClick={() => setPreviewSettings(prev => ({ ...prev, verticalOffset: prev.verticalOffset + 1 }))} className="p-1.5 bg-slate-100 hover:bg-slate-200 rounded transition-colors"><ArrowDown className="w-4 h-4" /></button>
+                      <button onClick={() => setPreviewSettings(prev => ({ ...prev, verticalOffset: prev.verticalOffset - 5 }))} className="p-1.5 bg-slate-100 hover:bg-slate-200 rounded transition-colors"><ArrowUp className="w-4 h-4" /></button>
+                      <input type="range" min="-500" max="500" step="1" value={previewSettings.verticalOffset} onChange={(e) => setPreviewSettings(prev => ({ ...prev, verticalOffset: parseInt(e.target.value) }))} className="flex-1 accent-emerald-600 h-1 bg-slate-100 rounded-lg" />
+                      <button onClick={() => setPreviewSettings(prev => ({ ...prev, verticalOffset: prev.verticalOffset + 5 }))} className="p-1.5 bg-slate-100 hover:bg-slate-200 rounded transition-colors"><ArrowDown className="w-4 h-4" /></button>
                    </div>
                  </div>
 
